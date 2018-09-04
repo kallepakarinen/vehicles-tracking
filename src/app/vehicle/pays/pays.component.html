@@ -1,0 +1,64 @@
+<mat-card class="payCard">
+  <mat-card-header>
+    <mat-card-title>Lisää uusi maksu</mat-card-title>
+  </mat-card-header>
+  <mat-form-field>
+    <input matInput
+           [(ngModel)]="payment.day"
+           type="date"
+           placeholder="Päivämäärä">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="payment.kilometers"
+           type="number"
+           required
+           placeholder="Kilometrit">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="payment.fuel"
+           type="number"
+           required
+           placeholder="Polttoaine">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="payment.service"
+           type="number"
+           required
+           placeholder="Huolto">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="payment.parts"
+           type="number"
+           required
+           placeholder="Varaosat">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="payment.insurance"
+           type="number"
+           required
+           placeholder="Vakuutus">
+  </mat-form-field>
+
+  <mat-form-field>
+  <input matInput [(ngModel)]="payment.tax"
+         type="number"
+         required
+         placeholder="Verot">
+</mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="payment.comment"
+           type="string"
+           required
+           placeholder="Kommentti">
+  </mat-form-field>
+  <button mat-raised-button (click)="updatePayment(payment)">Muokkaa</button>
+  <button mat-raised-button (click)="createPayment(payment)">Tallenna</button>
+</mat-card>
+
+
