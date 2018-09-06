@@ -103,6 +103,7 @@ export class AllPaymentsComponent implements OnInit {
     function q1(payment) {
       return payment.day >= year + '-09-01' && payment.day <= year + '-09-30';
     }
+
     function q2(payment) {
       return payment.day >= year + '-10-01' && payment.day <= year + '2018-10-31';
     }
@@ -141,7 +142,8 @@ export class AllPaymentsComponent implements OnInit {
       this.partsVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
       this.insuranceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
       this.taxVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
-      this.vehicleTotalSum.push(this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
+      this.vehicleTotalSum.push(
+        this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
     }
     // this.quartalTotalSum.push([this.quartalSum]);
     console.log(this.quartalTotalSum);
@@ -179,7 +181,7 @@ export class AllPaymentsComponent implements OnInit {
         },
         options: {
           responsive: false,
-          display: true
+          display: true,
         }
       });
     }
@@ -199,6 +201,10 @@ export class AllPaymentsComponent implements OnInit {
         }]
       },
       options: {
+        tooltips: {
+          mode: 'point',
+          intersect: false,
+        },
         responsive: false,
         display: true
       }

@@ -22,6 +22,7 @@ import {CovalentLayoutModule} from '@covalent/core';
 import {CommonModule} from '@angular/common';
 import {LocalStorageService} from './vehicle/services/local-storage.service';
 import {DateFormatPipe} from './vehicle/pipes/date-format.pipe';
+import { NotificationComponent } from './vehicle/notification/notification.component';
 
 const appRoutes: Routes = [
   {path: 'vehicles', component: VehicleListComponent},
@@ -43,6 +44,7 @@ const appRoutes: Routes = [
     PaysComponent,
     AllPaymentsComponent,
     DateFormatPipe,
+    NotificationComponent,
 
   ],
   imports: [
@@ -56,7 +58,8 @@ const appRoutes: Routes = [
     CommonModule,
   ],
   providers: [VehicleHttpService, PaymentService, PaymentHttpService, ReportHttpService, LocalStorageService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [NotificationComponent]
 })
 export class AppModule {
 }

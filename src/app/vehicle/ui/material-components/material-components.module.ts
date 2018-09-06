@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {
   MatButtonModule,
   MatCardModule,
-  MatDatepickerModule, MatIconModule,
+  MatDatepickerModule, MatDialogModule, MatIconModule,
   MatInputModule,
   MatListModule,
   MatNativeDateModule, MatSelectModule,
@@ -25,7 +25,8 @@ const materialModules = [
   MatToolbarModule,
   MatSortModule,
   MatTooltipModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDialogModule
 ];
 
 @NgModule({
