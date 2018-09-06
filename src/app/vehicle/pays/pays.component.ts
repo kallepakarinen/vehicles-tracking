@@ -2,10 +2,9 @@ import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
 import {Payment} from '../Payment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PaymentService} from '../services/payment.service';
-import * as moment from 'moment';
-import {formatDate} from '@angular/common';
-import {NotificationComponent} from '../notification/notification.component';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {NotificationDialogComponent} from '../notifications/notification-dialog/notification-dialog.component';
+import {NotificationSnackbarComponent} from '../notifications/notification-snackbar/notification-snackbar.component';
 
 @Component({
   selector: 'app-pays',
@@ -20,7 +19,7 @@ export class PaysComponent implements OnInit {
 
   constructor(@Inject(LOCALE_ID) private locale: string,
               private route: ActivatedRoute, private router: Router, private paymentService:
-                PaymentService, public dialog: MatDialog) {
+                PaymentService, public dialog: MatDialog, public snackBar: MatSnackBar) {
     this.payment = new Payment();
   }
 
@@ -45,6 +44,7 @@ export class PaysComponent implements OnInit {
     } else {
       payment.vehicleId = Number(this.vehicleId);
       this.paymentService.createPayment(payment);
+      this.openSnackBar();
       this.router.navigate(['/vehicles/' + payment.vehicleId]);
     }
   }
@@ -54,10 +54,18 @@ export class PaysComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(NotificationComponent, {
+    const dialogRef = this.dialog.open(NotificationDialogComponent, {
       width: '250px',
       role: 'alertdialog',
       data: 'Aseta päivämäärä'
     });
   }
+
+  openSnackBar() {
+    this.snackBar.openFromComponent(NotificationSnackbarComponent, {
+      data: 'Tallennus onnistui',
+      duration: 2000,
+    });
+  }
+
 }
