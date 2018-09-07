@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <!-- toolbar -->
+ <!--  <button *ngIf="!options.backEnabled" mat-icon-button (click)="onMenuClick()">
+      <mat-icon class="mat-18">menu</mat-icon>
+    </button>-->
+    <button *ngIf="options.backEnabled" mat-icon-button (click)="onNavigateBack()">
+      <mat-icon class="mat-18">arrow_back</mat-icon>
+    </button>
+  <span fxFlex>{{options.title}}</span>
+
+  <button mat-icon-button (click)="action.runAction()" *ngFor="let action of options.actions">
+    <mat-icon>{{action.icon}}</mat-icon>
+  </button>
+
+  <button  mat-icon-button style="float:right" (click)="infoPage()">
+    <mat-icon class="mat-18">info</mat-icon>
+  </button>
+  <!--  <button  mat-icon-button (click)="onLogOut()">
+      <mat-icon class="mat-18">star</mat-icon>
+    </button>-->
+</mat-toolbar>

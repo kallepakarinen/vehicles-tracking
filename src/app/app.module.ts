@@ -24,6 +24,8 @@ import {LocalStorageService} from './vehicle/services/local-storage.service';
 import {DateFormatPipe} from './vehicle/pipes/date-format.pipe';
 import { NotificationDialogComponent } from './vehicle/notifications/notification-dialog/notification-dialog.component';
 import { NotificationSnackbarComponent } from './vehicle/notifications/notification-snackbar/notification-snackbar.component';
+import { ToolbarComponent } from './vehicle/ui/toolbar/toolbar.component';
+import {ToolbarService} from './vehicle/ui/toolbar/toolbar.service';
 
 const appRoutes: Routes = [
   {path: 'vehicles', component: VehicleListComponent},
@@ -47,7 +49,7 @@ const appRoutes: Routes = [
     DateFormatPipe,
     NotificationDialogComponent,
     NotificationSnackbarComponent,
-
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +61,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     CommonModule,
   ],
-  providers: [VehicleHttpService, PaymentService, PaymentHttpService, ReportHttpService, LocalStorageService],
+  providers: [VehicleHttpService, PaymentService, PaymentHttpService, ReportHttpService, LocalStorageService, ToolbarService],
   bootstrap: [AppComponent],
   entryComponents: [NotificationDialogComponent, NotificationSnackbarComponent]
 })

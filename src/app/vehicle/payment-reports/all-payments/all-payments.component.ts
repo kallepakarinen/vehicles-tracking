@@ -7,6 +7,9 @@ import {VehicleService} from '../../services/vehicle.service';
 import {ReportPayment} from '../../ReportPayment';
 import Chart from 'chart.js';
 import {Vehicle} from '../../Vehicle';
+import {ToolbarOptions} from '../../ui/toolbar/toolbar-options';
+import {ToolbarService} from '../../ui/toolbar/toolbar.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-all-payments',
@@ -28,8 +31,9 @@ export class AllPaymentsComponent implements OnInit {
   ];
 
   payments: Payment[];
+  // testPayments: Payment[];
   // sum all payments
-  totalPayments: Payment[];
+  totalPayments: string[];
   fuelTotal: number;
   partsTotal: number;
   serviceTotal: number;
@@ -38,6 +42,7 @@ export class AllPaymentsComponent implements OnInit {
   // Quartals
   quartals: ReportPayment;
   quartalPayments: Payment[];
+  yearPayment: Payment[];
 
   fuelQuartal: number;
   partsQuartal: number;
@@ -73,7 +78,7 @@ export class AllPaymentsComponent implements OnInit {
   quartalTotalSum: any;
   summa: number[];
 
-  constructor(private reportService: ReportService, private route: ActivatedRoute, private vehicleService: VehicleService) {
+  constructor(private reportService: ReportService, private route: ActivatedRoute, private vehicleService: VehicleService, private toolbar: ToolbarService) {
     this.payments = [];
     this.vehicles = [];
     this.quartals = new ReportPayment();
@@ -85,10 +90,13 @@ export class AllPaymentsComponent implements OnInit {
     this.Q2 = [];
     this.summa = [];
     this.year = new Date().getFullYear();
+    this.yearPayment = [];
+
   }
 
 
   ngOnInit() {
+    this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Raportti', []));
     this.vehicles = this.vehicleService.getVehicles();
     this.vehicleCount = _.size(this.vehicles);
     this.totalPayments = this.reportService.getAllPayments();
@@ -98,14 +106,88 @@ export class AllPaymentsComponent implements OnInit {
 
     //////////////////// Quarted sum filter
     const year = this.year;
-    console.log(year);
+
+    function groupBy(list, keyGetter) {
+      const map = new Map();
+      list.forEach((item) => {
+        const key = keyGetter(item);
+        const collection = map.get(key);
+        if (!collection) {
+          map.set(key, [item]);
+        } else {
+          collection.push(item);
+        }
+      });
+      return map;
+    }
+
+    let groupedYear = groupBy(this.totalPayments, payment => moment(payment.day).year());
+    groupedYear = groupedYear.get(2018);
+
+    let groupedVehicle = groupBy(groupedYear, payment => payment.vehicleId);
+    groupedVehicle = groupedVehicle.get(1);
+
+    // Filter yearly payments from the previous step into four "buckets"
+    // momentjs provides function for finding out the quarter
+    let quarterlyPayments = [[], [], [], []];
+    let fuelquarterlyPayments = [[], [], [], []];
+
+    for (const payment of groupedVehicle) {
+      // Find out quarter with moment
+      // let quarter = 1; moment(payment.day).quarter();
+      let quarter = moment(payment.day).quarter();
+      let index = quarter - 1;
+      quarterlyPayments[index].push(payment);
+    }
+
+    quarterlyPayments.forEach((quarterlyData, index) => {
+      const quarter = index + 1;
+     // fuelquarterlyPayments[0] = _.sumBy(quarterlyData, 'fuel') || 0;
+      fuelquarterlyPayments[quarter] = _.sumBy(quarterlyData, 'fuel') || 0;
+      // Logic for processing each quarter
+    });
+    console.log(fuelquarterlyPayments);
+    console.log(quarterlyPayments);
+
+
+    /*
+       // gives true and false objects
+       const testPayments = _.groupBy(this.totalPayments, payment => payment.vehicleId === 1);
+       console.log(testPayments);
+       */
+
+    /*
+
+
+    // Filter totalPayments by year
+    this.yearPayment = this.totalPayments.filter(yearFilter);
+    console.log(this.yearPayment);
+    // Filter yearly payments from the previous step into four "buckets"
+    // momentjs provides function for finding out the quarter
+    let quarterlyPayments = [[], [], [], []];
+
+    for (const payment of this.yearPayment) {
+      // Find out quarter with moment
+     // let quarter = 1; moment(payment.day).quarter();
+      let quarter = moment(payment.day).quarter();
+      let index = quarter - 1;
+      quarterlyPayments[index].push(payment);
+    }
+    console.log(quarterlyPayments);
+
+    quarterlyPayments.forEach((quarterlyData, index) => {
+      const quarter = index + 1;
+
+      // Logic for processing each quarter
+    });*/
+
 
     function q1(payment) {
       return payment.day >= year + '-09-01' && payment.day <= year + '-09-30';
     }
 
     function q2(payment) {
-      return payment.day >= year + '-10-01' && payment.day <= year + '2018-10-31';
+      return payment.day >= year + '-10-01' && payment.day <= year + '-10-31';
     }
 
     for (this.i = 0; this.i < this.vehicleCount; this.i++) {
@@ -136,87 +218,87 @@ export class AllPaymentsComponent implements OnInit {
       }
 
 
-      // get vehicles sum for payments
-      this.fuelVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'fuel') || 0;
-      this.serviceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'service') || 0;
-      this.partsVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
-      this.insuranceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
-      this.taxVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
-      this.vehicleTotalSum.push(
-        this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
-    }
-    // this.quartalTotalSum.push([this.quartalSum]);
-    console.log(this.quartalTotalSum);
+      /*   // get vehicles sum for payments
+         this.fuelVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'fuel') || 0;
+         this.serviceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'service') || 0;
+         this.partsVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
+         this.insuranceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
+         this.taxVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
+         this.vehicleTotalSum.push(
+           this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
+       }
+       // this.quartalTotalSum.push([this.quartalSum]);
+       console.log(this.quartalTotalSum);*/
 
 
-    // this.vehicleFilter = _.filter(response, {'vehicleId': this.i});
-    this.fuelTotal = _.sumBy(this.totalPayments, 'fuel');
-    this.serviceTotal = _.sumBy(this.totalPayments, 'service');
-    this.partsTotal = _.sumBy(this.totalPayments, 'parts');
-    this.insuranceTotal = _.sumBy(this.totalPayments, 'insurance');
-    this.taxTotal = _.sumBy(this.totalPayments, 'tax');
-    //  this.fuelTotal = _.sumBy(response, 'fuel');
+      // this.vehicleFilter = _.filter(response, {'vehicleId': this.i});
+      this.fuelTotal = _.sumBy(this.totalPayments, 'fuel');
+      this.serviceTotal = _.sumBy(this.totalPayments, 'service');
+      this.partsTotal = _.sumBy(this.totalPayments, 'parts');
+      this.insuranceTotal = _.sumBy(this.totalPayments, 'insurance');
+      this.taxTotal = _.sumBy(this.totalPayments, 'tax');
+      //  this.fuelTotal = _.sumBy(response, 'fuel');
 
 
 // Quartal Chart
-    for (let j = 1; j <= 2; j++) {
-      if (j === 1) {
-        this.summa = this.Q1;
+      for (let j = 1; j <= 2; j++) {
+        if (j === 1) {
+          this.summa = this.Q1;
+        }
+        if (j === 2) {
+          this.summa = this.Q2;
+        }
+        this.canvas = document.getElementById('quartal' + [j]);
+        this.ctx = this.canvas.getContext('2d');
+        this.myChart = new Chart(this.ctx, {
+          type: 'pie',
+          data: {
+            labels: this.charLabel,
+            datasets: [{
+              label: 'sum of qartals',
+              data: this.summa,
+              backgroundColor: this.pieChartColors,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: false,
+            display: true,
+          }
+        });
       }
-      if (j === 2) {
-        this.summa = this.Q2;
-      }
-      this.canvas = document.getElementById('quartal' + [j]);
+
+      // total Chart
+      this.canvas = document.getElementById('vehiclesTotal');
       this.ctx = this.canvas.getContext('2d');
       this.myChart = new Chart(this.ctx, {
         type: 'pie',
         data: {
           labels: this.charLabel,
           datasets: [{
-            label: 'sum of qartals',
-            data: this.summa,
+            label: 'sum of Cars',
+            data: this.vehicleTotalSum,
             backgroundColor: this.pieChartColors,
             borderWidth: 1
           }]
         },
         options: {
+          tooltips: {
+            mode: 'point',
+            intersect: false,
+          },
           responsive: false,
-          display: true,
+          display: true
         }
       });
+
+
+      this.quartals.fuel = this.fuelQuartal;
+      this.quartals.parts = this.partsQuartal;
+      this.quartals.service = this.serviceQuartal;
+      this.quartals.insurance = this.insuranceQuartal;
+      this.quartals.tax = this.taxQuartal;
+
     }
-
-    // total Chart
-    this.canvas = document.getElementById('vehiclesTotal');
-    this.ctx = this.canvas.getContext('2d');
-    this.myChart = new Chart(this.ctx, {
-      type: 'pie',
-      data: {
-        labels: this.charLabel,
-        datasets: [{
-          label: 'sum of Cars',
-          data: this.vehicleTotalSum,
-          backgroundColor: this.pieChartColors,
-          borderWidth: 1
-        }]
-      },
-      options: {
-        tooltips: {
-          mode: 'point',
-          intersect: false,
-        },
-        responsive: false,
-        display: true
-      }
-    });
-
-
-    this.quartals.fuel = this.fuelQuartal;
-    this.quartals.parts = this.partsQuartal;
-    this.quartals.service = this.serviceQuartal;
-    this.quartals.insurance = this.insuranceQuartal;
-    this.quartals.tax = this.taxQuartal;
-
   }
-}
 

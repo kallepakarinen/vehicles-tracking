@@ -1,14 +1,17 @@
 <td-layout-manage-list opened="true" mode="side" color="primary">
-
   <div td-sidenav-content>
     <app-vehicle-list></app-vehicle-list>
   </div>
   <mat-toolbar td-sidenav-content color="primary">
-    <button mat-raised-button matTooltip="Lisää uusi ajoneuvo" aria-label="button" (click)="createNewVehicle()"><mat-icon>directions_car</mat-icon></button>
-  <button mat-raised-button matTooltip="Avaa raporttinäkymä" (click)="report()">Raportti</button>
-</mat-toolbar>
-<router-outlet></router-outlet>
-  <mat-toolbar color="primary">tekstiä</mat-toolbar>
+    <button mat-raised-button matTooltip="Lisää uusi ajoneuvo" aria-label="button" (click)="createNewVehicle()">
+      <mat-icon>directions_car</mat-icon>
+    </button>
+    <button mat-raised-button matTooltip="Avaa raporttinäkymä" (click)="report()">Raportti</button>
+  </mat-toolbar>
+  <app-toolbar></app-toolbar>
+ <!-- <mat-toolbar color="primary">tekstiä</mat-toolbar>-->
+  <router-outlet></router-outlet>
+
 </td-layout-manage-list>
 
 
