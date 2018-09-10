@@ -23,12 +23,10 @@ export class AllPaymentsComponent implements OnInit {
   vehicles: Vehicle[];
 
   view: any[] = [700, 400];
-
   // options
-  single: ChartData[];
-
+  allPaymentsChartData: ChartData[];
+  quartalPaymentsChartData: ChartData[];
   gradient = false;
-
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -40,11 +38,8 @@ export class AllPaymentsComponent implements OnInit {
   // Quartals
   vehicleQuartals: ReportPayment;
   vehicleReport: ReportPayment[];
-  quartalPayments: Payment[];
   yearPayment: Payment[];
-
   vehicleCount;
-
   year: any;
   // sums
   vehicleTotalSum: number[];
@@ -58,12 +53,13 @@ export class AllPaymentsComponent implements OnInit {
     this.vehicleQuartals = new ReportPayment();
     this.vehicleReport = [];
     this.vehicleTotalSum = [];
-    this.quartalPayments = [];
+    //   this.quartalPayments = [];
     this.quartalSum = [];
     this.quartalTotalSum = [];
     this.year = new Date().getFullYear();
     this.yearPayment = [];
-    this.single = [];
+    this.allPaymentsChartData = [];
+    this.quartalPaymentsChartData = [];
   }
 
   ngOnInit() {
@@ -127,16 +123,19 @@ export class AllPaymentsComponent implements OnInit {
       this.vehicleReport.push(vehicleReportData);
     });
 
-
     // chart data
     for (let i = 0; i < this.vehicleCount; i++) {
-      const chartData = new ChartData();
-      chartData.name = this.vehicleReport[i].vehicleName;
-      chartData.value = this.vehicleReport[i].yearlySum;
-      this.single.push(chartData);
+      const allPaymentData = new ChartData();
+      allPaymentData.name = this.vehicleReport[i].vehicleName;
+      allPaymentData.value = this.vehicleReport[i].yearlySum;
+      this.allPaymentsChartData.push(allPaymentData);
+      const quartalPaymentsData = new ChartData();
+      quartalPaymentsData.name = this.vehicleReport[i].vehicleName;
+      quartalPaymentsData.value = this.vehicleReport[i].quarterlySum[0];
+      this.quartalPaymentsChartData.push(quartalPaymentsData);
     }
-
     console.log(this.vehicleReport);
+    console.log(this.quartalPaymentsChartData);
   }
 
 

@@ -1,8 +1,19 @@
-<div style="height: 100px">
+<div>
   <ngx-charts-advanced-pie-chart
     [view]="view"
     [scheme]="colorScheme"
-    [results]="single"
+    [results]="allPaymentsChartData"
+    [gradient]="gradient"
+    (select)="onSelect($event)">
+  </ngx-charts-advanced-pie-chart>
+</div>
+
+
+<div>
+  <ngx-charts-advanced-pie-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="quartalPaymentsChartData"
     [gradient]="gradient"
     (select)="onSelect($event)">
   </ngx-charts-advanced-pie-chart>
