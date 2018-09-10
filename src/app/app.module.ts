@@ -26,6 +26,8 @@ import { NotificationDialogComponent } from './vehicle/notifications/notificatio
 import { NotificationSnackbarComponent } from './vehicle/notifications/notification-snackbar/notification-snackbar.component';
 import { ToolbarComponent } from './vehicle/ui/toolbar/toolbar.component';
 import {ToolbarService} from './vehicle/ui/toolbar/toolbar.service';
+import { NgxChartsModule } from "@swimlane/ngx-charts";
+
 
 const appRoutes: Routes = [
   {path: 'vehicles', component: VehicleListComponent},
@@ -60,6 +62,7 @@ const appRoutes: Routes = [
     CovalentLayoutModule,
     RouterModule.forRoot(appRoutes),
     CommonModule,
+    NgxChartsModule
   ],
   providers: [VehicleHttpService, PaymentService, PaymentHttpService, ReportHttpService, LocalStorageService, ToolbarService],
   bootstrap: [AppComponent],

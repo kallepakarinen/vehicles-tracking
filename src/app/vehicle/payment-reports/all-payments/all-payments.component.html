@@ -1,19 +1,15 @@
-<div>
-  <h2>Menot yhteensä</h2>
-  <canvas id="vehiclesTotal" width="700" height="400"></canvas>
-</div>
-
-<div fxLayout="row" fxLayoutAlign="start start">
-  <div>
-    <h2>1 Kvartaali</h2>
-    <canvas id="quartal1" width="220" height="190"></canvas>
-  </div>
-  <div>
-    <h2>2 Kvartaali</h2>
-    <canvas id="quartal2" width="220" height="190"></canvas>
-  </div>
+<div style="height: 100px">
+  <ngx-charts-advanced-pie-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="single"
+    [gradient]="gradient"
+    (select)="onSelect($event)">
+  </ngx-charts-advanced-pie-chart>
 </div>
 <!--
+
+
 
 <div>
   <mat-card>

@@ -10,8 +10,8 @@ import {Vehicle} from '../../Vehicle';
 import {ToolbarOptions} from '../../ui/toolbar/toolbar-options';
 import {ToolbarService} from '../../ui/toolbar/toolbar.service';
 import * as moment from 'moment';
-import {toNumbers} from '@angular/compiler-cli/src/diagnostics/typescript_version';
-import _quarter = moment.unitOfTime._quarter;
+import {ChartData} from '../../ChartData';
+
 
 @Component({
   selector: 'app-all-payments',
@@ -22,32 +22,28 @@ export class AllPaymentsComponent implements OnInit {
   // Vehicles
   vehicles: Vehicle[];
 
-  // Canvas pie chart
-  canvas: any;
-  ctx: any;
-  pieChartColors = [
-    'rgba(255, 99, 132, 1)',
-    'rgba(54, 162, 235, 1)',
-    'rgba(255, 206, 86, 1)',
-    'rgba(255, 111, 86, 1)'
-  ];
+  view: any[] = [700, 400];
+
+  // options
+  single: ChartData[];
+
+  gradient = false;
+
+
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
 
   payments: Payment[];
-  // testPayments: Payment[];
-  // sum all payments
   totalPayments: string[];
 
   // Quartals
   vehicleQuartals: ReportPayment;
-  piirakkaTaulukko: ReportPayment[];
+  vehicleReport: ReportPayment[];
   quartalPayments: Payment[];
   yearPayment: Payment[];
 
   vehicleCount;
-
-  myChart: any;
-  charLabel = [];
-  total: number;
 
   year: any;
   // sums
@@ -60,13 +56,14 @@ export class AllPaymentsComponent implements OnInit {
     this.payments = [];
     this.vehicles = [];
     this.vehicleQuartals = new ReportPayment();
-    this.piirakkaTaulukko = [];
+    this.vehicleReport = [];
     this.vehicleTotalSum = [];
     this.quartalPayments = [];
     this.quartalSum = [];
     this.quartalTotalSum = [];
     this.year = new Date().getFullYear();
     this.yearPayment = [];
+    this.single = [];
   }
 
   ngOnInit() {
@@ -109,9 +106,10 @@ export class AllPaymentsComponent implements OnInit {
       quarterlyPayments[index].push(payment);
     });
 
+
     this.vehicles.forEach((vehicle) => {
       console.log('VehicleId: ' + vehicle.id);
-      let vehicleReportData = new ReportPayment();
+      const vehicleReportData = new ReportPayment();
       vehicleReportData.vehicleId = vehicle.id;
       console.log(vehicleReportData);
       quarterlyPayments.forEach((quarterlyData, index) => {
@@ -125,9 +123,25 @@ export class AllPaymentsComponent implements OnInit {
           vehicleReportData.parts[index] + vehicleReportData.insurance[index] + vehicleReportData.tax[index];
       });
       vehicleReportData.yearlySum = vehicleReportData.quarterlySum.reduce((a, b) => a + b, 0);
-      this.piirakkaTaulukko.push(vehicleReportData);
+      vehicleReportData.vehicleName = vehicle.mark + ' ' + vehicle.registration;
+      this.vehicleReport.push(vehicleReportData);
     });
-    console.log(this.piirakkaTaulukko);
+
+
+    // chart data
+    for (let i = 0; i < this.vehicleCount; i++) {
+      const chartData = new ChartData();
+      chartData.name = this.vehicleReport[i].vehicleName;
+      chartData.value = this.vehicleReport[i].yearlySum;
+      this.single.push(chartData);
+    }
+
+    console.log(this.vehicleReport);
+  }
+
+
+  onSelect(event) {
+    console.log(event);
   }
 }
 
