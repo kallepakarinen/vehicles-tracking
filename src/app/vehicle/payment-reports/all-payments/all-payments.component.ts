@@ -22,10 +22,14 @@ export class AllPaymentsComponent implements OnInit {
   // Vehicles
   vehicles: Vehicle[];
 
-  view: any[] = [700, 400];
+  view: any[] = [700, 300];
+  Legend = 'Vuosikulutus';
   // options
   allPaymentsChartData: ChartData[];
-  quartalPaymentsChartData: ChartData[];
+  quartalPaymentsChartData1: ChartData[];
+  quartalPaymentsChartData2: ChartData[];
+  quartalPaymentsChartData3: ChartData[];
+  quartalPaymentsChartData4: ChartData[];
   gradient = false;
 
   colorScheme = {
@@ -59,7 +63,10 @@ export class AllPaymentsComponent implements OnInit {
     this.year = new Date().getFullYear();
     this.yearPayment = [];
     this.allPaymentsChartData = [];
-    this.quartalPaymentsChartData = [];
+    this.quartalPaymentsChartData1 = [];
+    this.quartalPaymentsChartData2 = [];
+    this.quartalPaymentsChartData3 = [];
+    this.quartalPaymentsChartData4 = [];
   }
 
   ngOnInit() {
@@ -104,10 +111,8 @@ export class AllPaymentsComponent implements OnInit {
 
 
     this.vehicles.forEach((vehicle) => {
-      console.log('VehicleId: ' + vehicle.id);
       const vehicleReportData = new ReportPayment();
       vehicleReportData.vehicleId = vehicle.id;
-      console.log(vehicleReportData);
       quarterlyPayments.forEach((quarterlyData, index) => {
         const quarter = index + 1;
         vehicleReportData.fuel[index] = _.sumBy(quarterlyData.filter(payment => payment.vehicleId === vehicle.id), 'fuel') || 0;
@@ -122,20 +127,28 @@ export class AllPaymentsComponent implements OnInit {
       vehicleReportData.vehicleName = vehicle.mark + ' ' + vehicle.registration;
       this.vehicleReport.push(vehicleReportData);
     });
-
+    console.log(this.vehicleReport);
     // chart data
+    const arrays = [[], [], [], []];
     for (let i = 0; i < this.vehicleCount; i++) {
       const allPaymentData = new ChartData();
       allPaymentData.name = this.vehicleReport[i].vehicleName;
       allPaymentData.value = this.vehicleReport[i].yearlySum;
       this.allPaymentsChartData.push(allPaymentData);
-      const quartalPaymentsData = new ChartData();
-      quartalPaymentsData.name = this.vehicleReport[i].vehicleName;
-      quartalPaymentsData.value = this.vehicleReport[i].quarterlySum[0];
-      this.quartalPaymentsChartData.push(quartalPaymentsData);
+
+      for (let j = 0; j < 4; j++) {
+        const quartalPaymentsData = new ChartData();
+        quartalPaymentsData.name = this.vehicleReport[i].vehicleName;
+        quartalPaymentsData.value = this.vehicleReport[i].quarterlySum[j];
+        arrays[j].push(quartalPaymentsData);
+      //  this.quartalPaymentsChartData.push(quartalPaymentsData);
+      }
     }
-    console.log(this.vehicleReport);
-    console.log(this.quartalPaymentsChartData);
+    this.quartalPaymentsChartData1 = arrays[0];
+    this.quartalPaymentsChartData2 = arrays[1];
+    this.quartalPaymentsChartData3 = arrays[2];
+    this.quartalPaymentsChartData4 = arrays[3];
+
   }
 
 
