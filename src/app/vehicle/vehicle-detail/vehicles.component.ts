@@ -5,6 +5,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PaymentService} from '../services/payment.service';
 import * as _ from 'lodash';
 import {Payment} from '../Payment';
+import {ToolbarService} from '../ui/toolbar/toolbar.service';
+import {ToolbarOptions} from '../ui/toolbar/toolbar-options';
 
 @Component({
   selector: 'app-vehicles',
@@ -27,13 +29,14 @@ export class VehiclesComponent implements OnInit {
 
   constructor(private vehicleService: VehicleService,
               private router: Router, private route: ActivatedRoute,
-              private paymentService: PaymentService) {
+              private paymentService: PaymentService, private toolbar: ToolbarService) {
     this.vehicle = new Vehicle();
     this.vehicles = [];
     this.payments = [];
   }
 
   ngOnInit() {
+    this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Lisää ajoneuvo', []));
     this.route.params.subscribe(params => {
       this.vehicleId = params['id'];
       this.vehicleId = this.route.snapshot.paramMap.get('id');

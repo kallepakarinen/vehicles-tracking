@@ -1,7 +1,7 @@
-<mat-list fxLayout="column" fxLayoutAlign="space-between none">
-  <mat-list-item *ngFor="let vehicle of vehicles" matTooltip="Valitse näytettävän ajoneuvon tiedot" (click)="onVehicleSelect(vehicle)"  >
-      <p>{{vehicle.registration}}_</p>
-      <p>{{vehicle.mark}}</p>
+<mat-list matTooltip="Valitse näytettävän ajoneuvon tiedot" fxLayout="column" fxLayoutAlign="space-between none">
+  <mat-list-item *ngFor="let vehicle of vehicles" (click)="onVehicleSelect(vehicle)">
+    <p class="pointer">{{vehicle.registration}}_
+      {{vehicle.mark}}</p>
   </mat-list-item>
 </mat-list>
 

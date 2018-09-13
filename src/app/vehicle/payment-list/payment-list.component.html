@@ -1,45 +1,112 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-  <ng-container matColumnDef="day">
-    <th style="min-width: 100px" mat-header-cell *matHeaderCellDef mat-sort-header> Päivä</th>
-    <td style="min-width: 100px" mat-cell *matCellDef="let payments"> {{payments.day | date:'dd.MM.yyyy'}}</td>
-  </ng-container>
+<div fxLayout="column" fxLayoutAlign=" stretch">
+  <div>
+    <div fxLayout="row" fxLayoutAlign=" start">
+    <div fxFlex="20">
+      <mat-card class="pay-card">
+        <mat-card-header>
+          <mat-card-title>Lisää uusi maksu</mat-card-title>
+        </mat-card-header>
+        <mat-form-field>
+          <input matInput
+                 [(ngModel)]="payment.day"
+                 type="date"
+                 placeholder="Päivämäärä">
+        </mat-form-field>
 
-  <ng-container matColumnDef="kilometers">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Kilometrit</th>
-    <td mat-cell *matCellDef="let payments"> {{payments.kilometers}}</td>
-  </ng-container>
+        <mat-form-field>
+          <input matInput [(ngModel)]="payment.kilometers"
+                 type="number"
+                 required
+                 placeholder="Kilometrit">
+        </mat-form-field>
 
-  <ng-container matColumnDef="fuel">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Polttoaine</th>
-    <td mat-cell *matCellDef="let payments"> {{payments.fuel}}</td>
-  </ng-container>
+        <mat-form-field>
+          <mat-select placeholder="Maksu" [(ngModel)]="selectedValue" name="selectPayment">
+            <mat-option *ngFor="let selectPayment of selectPayments" [value]="selectPayment.value">
+              {{selectPayment.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  <ng-container matColumnDef="service">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Huolto</th>
-    <td mat-cell *matCellDef="let payments"> {{payments.service}}</td>
-  </ng-container>
+        <mat-form-field>
+          <input matInput [(ngModel)]="paymentInput"
+                 type="number"
+                 required
+                 placeholder={{selectedValue}}>
+        </mat-form-field>
 
-  <ng-container matColumnDef="parts">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Varaosat</th>
-    <td mat-cell *matCellDef="let payments"> {{payments.parts}}</td>
-  </ng-container>
+        <mat-form-field>
+          <input matInput [(ngModel)]="payment.comment"
+                 type="string"
+                 required
+                 placeholder="Kommentti">
+        </mat-form-field>
 
-  <ng-container matColumnDef="insurance">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Vakuutukset</th>
-    <td mat-cell *matCellDef="let payments"> {{payments.insurance}}</td>
-  </ng-container>
+        <button color="accent" mat-raised-button (click)="createPayment(payment)">
+          <mat-icon>save</mat-icon>
+        </button>
+      </mat-card>
+    </div>
+    <div fxFlex="80">
+      <mat-card class="chart-card">
+        <ngx-charts-bar-vertical
+          [scheme]="colorScheme"
+          [results]="allPaymentsChartData"
+          [legend]="true"
+          [legendTitle]="Legend"
+          [yAxis]="true"
+          [xAxis]="true"
+          [showYAxisLabel]="true"
+          [showDataLabel]="true"
+          (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+      </mat-card>
+    </div>
 
-  <ng-container matColumnDef="tax">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Verot</th>
-    <td mat-cell *matCellDef="let payments"> {{payments.tax}}</td>
-  </ng-container>
+    <div fxFlex>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="day">
+          <th style="min-width: 100px" mat-header-cell *matHeaderCellDef mat-sort-header>Päivä</th>
+          <td style="min-width: 100px" mat-cell *matCellDef="let payments"> {{payments.day | date:'dd.MM.yyyy'}}</td>
+        </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let payment; columns: displayedColumns;" (click)="onSelectPayment(payment)"></tr>
-</table>
+        <ng-container matColumnDef="kilometers">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kilometrit</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.kilometers}}</td>
+        </ng-container>
 
-<button mat-raised-button color="accent" matTooltip="Lisää uusi maksu" (click)="createPayment()" class="buttonCreatePayment">
-  <mat-icon>add_circle</mat-icon>
-</button>
+        <ng-container matColumnDef="fuel">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Polttoaine</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.fuel}}</td>
+        </ng-container>
 
+        <ng-container matColumnDef="service">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Huolto</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.service}}</td>
+        </ng-container>
 
+        <ng-container matColumnDef="parts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Varaosat</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.parts}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="insurance">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Vakuutukset</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.insurance}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tax">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Verot</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.tax}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kommentti</th>
+          <td mat-cell *matCellDef="let payments"> {{payments.comment}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let payment; columns: displayedColumns;" (click)="onSelectPayment(payment)"></tr>
+      </table>
+    </div>
+  </div>

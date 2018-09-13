@@ -24,6 +24,6 @@ export class VehicleListComponent implements OnInit {
   }
 
   onVehicleSelect(vehicle) {
-    this.router.navigate(['/vehicles', vehicle.id]);
+    this.router.navigate(['/payments', vehicle.id]);
   }
 }

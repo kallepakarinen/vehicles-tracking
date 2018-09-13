@@ -8,3 +8,10 @@ th.mat-sort-header-sorted {
   float:right;
   margin: 10px;
 }
+.pay-card {
+  padding-left: 24px;
+}
+.chart-card {
+  width: 100%;
+height: 300px;
+}

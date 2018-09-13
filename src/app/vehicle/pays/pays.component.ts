@@ -27,7 +27,7 @@ export class PaysComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.toolbar.setToolbarOptions(new ToolbarOptions(false, 'Contacts', []));
+    this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Muokkaa maksu', []));
     this.paymentId = this.route.snapshot.paramMap.get('id');
     if (this.paymentId !== null) {
       this.payment = this.paymentService.getPaymentById(+this.paymentId);

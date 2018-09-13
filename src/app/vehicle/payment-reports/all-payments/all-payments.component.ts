@@ -101,6 +101,7 @@ export class AllPaymentsComponent implements OnInit {
       return map;
     }
 
+    // Filtering data with year and initializing quarters
     let groupedYear = groupBy(this.totalPayments, payment => moment(payment.day).year());
     groupedYear = groupedYear.get(year);
     groupedYear.forEach((payment) => {
@@ -110,6 +111,7 @@ export class AllPaymentsComponent implements OnInit {
     });
 
 
+    // Filtering vehicles
     this.vehicles.forEach((vehicle) => {
       const vehicleReportData = new ReportPayment();
       vehicleReportData.vehicleId = vehicle.id;
@@ -127,7 +129,8 @@ export class AllPaymentsComponent implements OnInit {
       vehicleReportData.vehicleName = vehicle.mark + ' ' + vehicle.registration;
       this.vehicleReport.push(vehicleReportData);
     });
-    console.log(this.vehicleReport);
+
+
     // chart data
     const arrays = [[], [], [], []];
     for (let i = 0; i < this.vehicleCount; i++) {
@@ -148,8 +151,9 @@ export class AllPaymentsComponent implements OnInit {
     this.quartalPaymentsChartData2 = arrays[1];
     this.quartalPaymentsChartData3 = arrays[2];
     this.quartalPaymentsChartData4 = arrays[3];
-
+    console.log(arrays);
   }
+
 
 
   onSelect(event) {
