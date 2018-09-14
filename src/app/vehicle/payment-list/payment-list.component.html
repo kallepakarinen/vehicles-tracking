@@ -1,11 +1,11 @@
-<div fxLayout="row" fxLayoutAlign="none" >
+<div fxLayout="row" fxLayoutAlign="none">
 
   <div fxFlex="">
     <mat-card class="pay-card">
       <mat-card-header>
         <mat-card-title>Lisää uusi maksu</mat-card-title>
       </mat-card-header>
-      <mat-form-field>
+      <mat-form-field id="form">
         <input matInput
                [(ngModel)]="payment.day"
                type="date"
@@ -64,7 +64,7 @@
 
 <div fxLayout="column" fxLayoutAlign=" none">
   <div fxFlex class="table-div">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort class="pointer">
       <ng-container matColumnDef="day">
         <th style="min-width: 100px" mat-header-cell *matHeaderCellDef mat-sort-header>Päivä</th>
         <td style="min-width: 100px" mat-cell *matCellDef="let payments"> {{payments.day | date:'dd.MM.yyyy'}}</td>
@@ -105,8 +105,9 @@
         <td mat-cell *matCellDef="let payments"> {{payments.comment}}</td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let payment; columns: displayedColumns;" (click)="onSelectPayment(payment)"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" color="#a9a9a9"></tr>
+      <tr mat-row *matRowDef="let payment; columns: displayedColumns;" matTooltip="Valitse muokattava maksutapahtuma"
+          (click)="onSelectPayment(payment)"></tr>
     </table>
 
   </div>

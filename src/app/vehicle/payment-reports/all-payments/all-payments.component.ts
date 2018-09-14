@@ -33,7 +33,7 @@ export class AllPaymentsComponent implements OnInit {
   gradient = false;
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#a8385d', '#7aa3e5', '#a27ea8', '#aae3f5', '#adcded', '#a95963', '#8796c0', '#7ed3ed', '#50abcc', '#ad6886']
   };
 
   payments: Payment[];
@@ -45,6 +45,7 @@ export class AllPaymentsComponent implements OnInit {
   yearPayment: Payment[];
   vehicleCount;
   year: any;
+
   // sums
   vehicleTotalSum: number[];
   quartalSum: number[];

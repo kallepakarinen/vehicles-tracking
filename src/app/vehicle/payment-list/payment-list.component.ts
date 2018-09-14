@@ -2,12 +2,13 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Payment} from '../Payment';
 import {PaymentService} from '../services/payment.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
 import * as _ from 'lodash';
 import {ChartData} from '../ChartData';
 import {ToolbarService} from '../ui/toolbar/toolbar.service';
 import {ToolbarOptions} from '../ui/toolbar/toolbar-options';
 import {NotificationSnackbarComponent} from '../notifications/notification-snackbar/notification-snackbar.component';
+import {NotificationDialogComponent} from '../notifications/notification-dialog/notification-dialog.component';
 
 @Component({
   selector: 'app-payment-list',
@@ -26,11 +27,8 @@ export class PaymentListComponent implements OnInit {
     {value: 'tax', viewValue: 'Verot'}
   ];
 
-
-  view: any[] = [700, 300];
-  Legend = 'Kokonaiskulutus';
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#a8385d', '#7aa3e5', '#a27ea8', '#aae3f5', '#adcded', '#a95963', '#8796c0', '#7ed3ed', '#50abcc', '#ad6886']
   };
   allPaymentsChartData: ChartData[];
   payment: Payment;
@@ -47,13 +45,13 @@ export class PaymentListComponent implements OnInit {
   displayedColumns: string[] = ['day', 'kilometers', 'fuel', 'service', 'parts', 'insurance', 'tax', 'comment'];
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private paymentService: PaymentService, private route: ActivatedRoute, private router: Router,  private toolbar: ToolbarService, public snackBar: MatSnackBar) {
+  constructor(private paymentService: PaymentService, private route: ActivatedRoute, private router: Router, private toolbar: ToolbarService, public snackBar: MatSnackBar, public dialog: MatDialog) {
     this.payments = [];
     this.dataSource = new MatTableDataSource(this.payments);
     this.dataSource.sort = this.sort;
     this.allPaymentsChartData = [];
     this.payment = new Payment();
-    this.paymentInput = 0;
+    //this.paymentInput = 0;
   }
 
   ngOnInit() {
@@ -89,7 +87,6 @@ export class PaymentListComponent implements OnInit {
       this.tax.value = _.sumBy(this.payments, 'tax') || 0;
       this.allPaymentsChartData.push(this.fuel, this.service, this.parts, this.insurance, this.tax);
 
-      console.log(this.allPaymentsChartData);
       this.dataSource = new MatTableDataSource(this.payments);
       this.dataSource.sort = this.sort;
 
@@ -101,23 +98,43 @@ export class PaymentListComponent implements OnInit {
   }
 
   createPayment(): void {
-    if (this.selectedValue === 'fuel') {
-      this.payment.fuel = this.paymentInput;
+    if (this.payment.day === undefined) {
+      this.openDialog();
+    } else {
+      if (this.selectedValue === 'fuel') {
+        this.payment.fuel = this.paymentInput;
+      }
+      if (this.selectedValue === 'service') {
+        this.payment.service = this.paymentInput;
+      }
+      if (this.selectedValue === 'parts') {
+        this.payment.parts = this.paymentInput;
+      }
+      if (this.selectedValue === 'insurance') {
+        this.payment.insurance = this.paymentInput;
+      }
+      if (this.selectedValue === 'tax') {
+        this.payment.tax = this.paymentInput;
+      }
+      this.payment.vehicleId = Number(this.vehicleId);
+      this.paymentService.createPayment(this.payment);
+      this.openSnackBar();
+      this.payments = this.paymentService.getVehiclePayments(+this.vehicleId);
+      this.dataSource = new MatTableDataSource(this.payments);
+      this.payment = new Payment();
+      this.paymentInput = null;
+      this.ngOnInit();
     }
-    if (this.selectedValue === 'service') {
-      this.payment.service = this.paymentInput;
-    }   if (this.selectedValue === 'parts') {
-      this.payment.parts = this.paymentInput;
-    }   if (this.selectedValue === 'insurance') {
-      this.payment.insurance = this.paymentInput;
-    }   if (this.selectedValue === 'tax') {
-      this.payment.tax = this.paymentInput;
-    }
-    this.payment.vehicleId = Number(this.vehicleId);
-    this.paymentService.createPayment(this.payment);
-    this.openSnackBar();
-    this.router.navigate(['/payments', this.payment.vehicleId]);
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(NotificationDialogComponent, {
+      width: '250px',
+      role: 'alertdialog',
+      data: 'Aseta päivämäärä'
+    });
+  }
+
 
   openSnackBar() {
     this.snackBar.openFromComponent(NotificationSnackbarComponent, {

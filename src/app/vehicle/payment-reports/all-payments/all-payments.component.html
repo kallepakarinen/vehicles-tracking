@@ -1,20 +1,5 @@
-<div>
-  <ngx-charts-pie-chart
-    [view]="view"
-    [scheme]="colorScheme"
-    [results]="allPaymentsChartData"
-    [gradient]="gradient"
-    [labels]="true"
-    [legend]="true"
-    [legendTitle]="Legend"
-    [trimLabels]="true"
-    [maxLabelLength]="20"
-    (select)="onSelect($event)">
-  </ngx-charts-pie-chart>
-</div>
-
-
-<div>
+<div fxLayout="column" fxLayoutAlign=" center">
+  <h1>Vuosikulut</h1>
   <ngx-charts-advanced-pie-chart
     [view]="view"
     [scheme]="colorScheme"
@@ -24,49 +9,59 @@
   </ngx-charts-advanced-pie-chart>
 </div>
 
-
-
-<!--
-
-<div fxLayout="row" fxLayoutAlign="center none" >
-  <div>
-    <ngx-charts-advanced-pie-chart
-      [view]="view"
+<div fxLayout="row" fxLayoutAlign="center none">
+  <div class="quartal-div">
+    <h1>1-Kvartaali</h1>
+    <ngx-charts-pie-chart
       [scheme]="colorScheme"
       [results]="quartalPaymentsChartData1"
       [gradient]="gradient"
+      [labels]="true"
+      [trimLabels]="true"
+      [maxLabelLength]="20"
       (select)="onSelect($event)">
-    </ngx-charts-advanced-pie-chart>
+    </ngx-charts-pie-chart>
   </div>
 
-  <div>
-    <ngx-charts-advanced-pie-chart
-      [view]="view"
+  <div class="quartal-div">
+    <h1>2-Kvartaali</h1>
+    <ngx-charts-pie-chart
       [scheme]="colorScheme"
       [results]="quartalPaymentsChartData2"
       [gradient]="gradient"
+      [labels]="true"
+      [trimLabels]="true"
+      [maxLabelLength]="20"
       (select)="onSelect($event)">
-    </ngx-charts-advanced-pie-chart>
+    </ngx-charts-pie-chart>
   </div>
+</div>
 
-  <div>
-    <ngx-charts-advanced-pie-chart
-      [view]="view"
+<div fxLayout="row" fxLayoutAlign="center none">
+  <div class="quartal-div">
+    <h1>3-Kvartaali</h1>
+    <ngx-charts-pie-chart
       [scheme]="colorScheme"
       [results]="quartalPaymentsChartData3"
       [gradient]="gradient"
+      [labels]="true"
+      [trimLabels]="true"
+      [maxLabelLength]="20"
       (select)="onSelect($event)">
-    </ngx-charts-advanced-pie-chart>
+    </ngx-charts-pie-chart>
   </div>
-
-  <div>
-    <ngx-charts-advanced-pie-chart
-      [view]="view"
+  <div class="quartal-div">
+    <h1>4-Kvartaali</h1>
+    <ngx-charts-pie-chart
       [scheme]="colorScheme"
       [results]="quartalPaymentsChartData4"
       [gradient]="gradient"
+      [labels]="true"
+      [trimLabels]="true"
+      [maxLabelLength]="20"
       (select)="onSelect($event)">
-    </ngx-charts-advanced-pie-chart>
+    </ngx-charts-pie-chart>
   </div>
 </div>
--->
+
+
