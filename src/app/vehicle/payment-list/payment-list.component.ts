@@ -2,11 +2,12 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Payment} from '../Payment';
 import {PaymentService} from '../services/payment.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import {MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
 import * as _ from 'lodash';
 import {ChartData} from '../ChartData';
 import {ToolbarService} from '../ui/toolbar/toolbar.service';
 import {ToolbarOptions} from '../ui/toolbar/toolbar-options';
+import {NotificationSnackbarComponent} from '../notifications/notification-snackbar/notification-snackbar.component';
 
 @Component({
   selector: 'app-payment-list',
@@ -46,7 +47,7 @@ export class PaymentListComponent implements OnInit {
   displayedColumns: string[] = ['day', 'kilometers', 'fuel', 'service', 'parts', 'insurance', 'tax', 'comment'];
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private paymentService: PaymentService, private route: ActivatedRoute, private router: Router,  private toolbar: ToolbarService) {
+  constructor(private paymentService: PaymentService, private route: ActivatedRoute, private router: Router,  private toolbar: ToolbarService, public snackBar: MatSnackBar) {
     this.payments = [];
     this.dataSource = new MatTableDataSource(this.payments);
     this.dataSource.sort = this.sort;
@@ -114,6 +115,14 @@ export class PaymentListComponent implements OnInit {
     }
     this.payment.vehicleId = Number(this.vehicleId);
     this.paymentService.createPayment(this.payment);
-console.log(this.payment);
+    this.openSnackBar();
+    this.router.navigate(['/payments', this.payment.vehicleId]);
+  }
+
+  openSnackBar() {
+    this.snackBar.openFromComponent(NotificationSnackbarComponent, {
+      data: 'Tallennus onnistui!',
+      duration: 2000,
+    });
   }
 }

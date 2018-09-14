@@ -38,7 +38,8 @@ export class PaysComponent implements OnInit {
 
   updatePayment(payment) {
     this.paymentService.updatePayment(payment);
-    this.router.navigate(['/vehicles/' + payment.vehicleId]);
+    this.openSnackBar();
+    this.router.navigate(['/payments', this.payment.vehicleId]);
   }
 
 
@@ -53,9 +54,6 @@ export class PaysComponent implements OnInit {
     }
   }
 
-  test() {
-    this.openDialog();
-  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NotificationDialogComponent, {
@@ -67,7 +65,7 @@ export class PaysComponent implements OnInit {
 
   openSnackBar() {
     this.snackBar.openFromComponent(NotificationSnackbarComponent, {
-      data: 'Tallennus onnistui',
+      data: 'Maksun muokkaus onnistui!',
       duration: 2000,
     });
   }
