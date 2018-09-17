@@ -2,7 +2,7 @@ import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
 import {Payment} from '../Payment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PaymentService} from '../services/payment.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {NotificationDialogComponent} from '../notifications/notification-dialog/notification-dialog.component';
 import {NotificationSnackbarComponent} from '../notifications/notification-snackbar/notification-snackbar.component';
 import {ToolbarService} from '../ui/toolbar/toolbar.service';
@@ -18,6 +18,7 @@ export class PaysComponent implements OnInit {
   payment: Payment;
   paymentId: any;
   vehicleId: any;
+  dialogRef: MatDialogRef<NotificationDialogComponent>;
 
   constructor(@Inject(LOCALE_ID) private locale: string,
               private route: ActivatedRoute, private router: Router, private paymentService:
@@ -36,30 +37,27 @@ export class PaysComponent implements OnInit {
   }
 
 
-  updatePayment(payment) {
-    this.paymentService.updatePayment(payment);
-    this.openSnackBar();
-    this.router.navigate(['/payments', this.payment.vehicleId]);
+  moi(payment) {
+    // this.openDialog();
+
+    /*    this.paymentService.updatePayment(payment);
+        this.openSnackBar();
+        this.router.navigate(['/payments', this.payment.vehicleId]);*/
   }
 
-
-  createPayment(payment): void {
-    if (this.payment.day === undefined) {
-      this.openDialog();
-    } else {
-      payment.vehicleId = Number(this.vehicleId);
-      this.paymentService.createPayment(payment);
-      this.openSnackBar();
-      this.router.navigate(['/vehicles/' + payment.vehicleId]);
-    }
-  }
-
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(NotificationDialogComponent, {
+  updatePayment(payment): void {
+    this.dialogRef = this.dialog.open(NotificationDialogComponent, {
+      disableClose: false,
       width: '250px',
-      role: 'alertdialog',
-      data: 'Aseta päivämäärä'
+    });
+    this.dialogRef.componentInstance.data = 'Haluatko varmasti muokata maksua?';
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.paymentService.updatePayment(payment);
+        this.openSnackBar();
+        this.router.navigate(['/payments', this.payment.vehicleId]);
+      }
+      this.dialogRef = null;
     });
   }
 

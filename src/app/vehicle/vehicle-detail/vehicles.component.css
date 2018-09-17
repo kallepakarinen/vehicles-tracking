@@ -1,6 +1,5 @@
-.cw-vehicle-detail-fields {
-  width: 300px;
-}
-.vehicleCard{
+
+.vehicle-card{
   padding: 15px;
 }
+.pointer {cursor: pointer;}

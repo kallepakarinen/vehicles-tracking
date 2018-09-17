@@ -15,5 +15,7 @@ export class NotificationDialogComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
