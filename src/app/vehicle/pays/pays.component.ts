@@ -28,7 +28,7 @@ export class PaysComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Muokkaa maksu', []));
+    this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Muokkaa maksutapahtuma', []));
     this.paymentId = this.route.snapshot.paramMap.get('id');
     if (this.paymentId !== null) {
       this.payment = this.paymentService.getPaymentById(+this.paymentId);
@@ -36,21 +36,12 @@ export class PaysComponent implements OnInit {
     this.vehicleId = this.route.snapshot.paramMap.get('vehicle');
   }
 
-
-  moi(payment) {
-    // this.openDialog();
-
-    /*    this.paymentService.updatePayment(payment);
-        this.openSnackBar();
-        this.router.navigate(['/payments', this.payment.vehicleId]);*/
-  }
-
   updatePayment(payment): void {
     this.dialogRef = this.dialog.open(NotificationDialogComponent, {
       disableClose: false,
       width: '250px',
     });
-    this.dialogRef.componentInstance.data = 'Haluatko varmasti muokata maksua?';
+    this.dialogRef.componentInstance.data = 'Muokataanko maksutapahtuma?';
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.paymentService.updatePayment(payment);

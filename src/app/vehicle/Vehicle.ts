@@ -3,15 +3,18 @@ export class Vehicle {
   registration: string;
   mark: string;
   acquisitionDay: string;
-  prise: number;
+  price: number;
   resaleValue: number;
+  active: boolean;
 
-  constructor(id?: number, registration?: string, mark?: string, acquisitionDay?: string, prise?: number, resaleValue?: number) {
+  constructor(id?: number, registration?: string, mark?: string,
+              acquisitionDay?: string, price?: number, resaleValue?: number, active?: boolean) {
     this.id = id;
     this.registration = registration;
     this.mark = mark;
     this.acquisitionDay = acquisitionDay;
-    this.prise = prise;
+    this.price = price;
     this.resaleValue = resaleValue;
+    this.active = active;
   }
 }

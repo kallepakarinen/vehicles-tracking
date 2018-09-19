@@ -44,6 +44,19 @@ export class LocalStorageService {
     this.setLocalStorageData(this.vehicles);
   }
 
+  public updateVehicle(vehicle: Vehicle) {
+    console.log(vehicle);
+    if (vehicle) {
+      this.vehicles = this.loadVehicles();
+      const vehicleIndex = _.findIndex(this.vehicles, ['id', vehicle.id]);
+      if (vehicleIndex >= 0) {
+        this.vehicles.splice(vehicleIndex, 1, vehicle);
+        this.setLocalStorageData(this.vehicles);
+      }
+    }
+  }
+
+
   private getLocalStorageData() {
     const data = localStorage.getItem(this.vehiclesStorageKey);
     return JSON.parse(data);

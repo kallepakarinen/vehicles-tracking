@@ -15,29 +15,44 @@ import {NotificationSnackbarComponent} from '../notifications/notification-snack
 export class VehiclesComponent implements OnInit {
   vehicle: Vehicle;
   vehicles: Vehicle[];
-vehicleId: any;
+  vehicleId: any;
+  editingEnabled: boolean;
 
   constructor(@Inject(LOCALE_ID) private locale: string, private vehicleService: VehicleService,
               private router: Router, private route: ActivatedRoute,
-               private toolbar: ToolbarService, public snackBar: MatSnackBar) {
+              private toolbar: ToolbarService, public snackBar: MatSnackBar) {
     this.vehicle = new Vehicle();
     this.vehicles = [];
+    this.editingEnabled = false;
   }
 
   ngOnInit() {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Lisää ajoneuvo', []));
     this.vehicleId = this.route.snapshot.paramMap.get('id');
-    console.log(this.vehicleId);
-    this.vehicles = this.vehicleService.getVehicles();
+    this.vehicleService.getVehicles().subscribe(response => {
+      this.vehicles = response;
+    });
+
     if (this.vehicleId !== null) {
-      this.vehicle = this.vehicleService.getVehicleById(+this.vehicleId);
+      this.editingEnabled = true;
+      this.vehicleService.getVehicleById(this.vehicleId).subscribe(response => {
+        console.log(response);
+        this.vehicle = response;
+      });
     }
   }
 
-  onSave() {
-    this.vehicleService.createVehicle(this.vehicle);
+  onVehicleSave(): void {
+    this.vehicleService.createVehicle(this.vehicle).subscribe(response => {});
     this.openSnackBar();
-    this.router.navigate(['/vehicles']);
+    this.router.navigate(['/vehicles/']);
+  }
+
+  OnVehicleUpdate(vehicle): void {
+   this.vehicleService.updateVehicle(vehicle).subscribe(response => {
+     vehicle = response;
+     this.router.navigate(['/vehicles/new']);
+   });
   }
 
   openSnackBar() {
@@ -49,7 +64,7 @@ vehicleId: any;
 
   onVehicleSelect(vehicle) {
     this.router.navigate(['/vehicles/' + vehicle.id]);
-    this.ngOnInit();
+   // this.ngOnInit();
   }
 
 }
