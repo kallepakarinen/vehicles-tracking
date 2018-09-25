@@ -4,6 +4,7 @@ import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {Payment} from '../Payment';
+import {ReportPayment} from '../ReportPayment';
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class PaymentHttpService {
   }
 
   getVehiclePayments(id): Observable<Payment[]> {
-    return this.httpClient.get(this.url + '/' + '?vehicleId=' + id).pipe(map(response => {
+    return this.httpClient.get('http://localhost:59028/api/vehicles/' + id + '/payments').pipe(map(response => {
       return response as Payment[];
     }));
   }
@@ -38,6 +39,15 @@ export class PaymentHttpService {
    return this.httpClient.post(this.url, payment).pipe(map(response => {
      return response as Payment;
    }));
+  }
+
+  deletePayment(payment): Observable<any> {
+    return this.httpClient.delete(this.url + '/' + payment.id);
+  }
+  reportPayment(): Observable<ReportPayment[]> {
+    return this.httpClient.get(this.url + '/report').pipe(map(response => {
+      return response as ReportPayment[];
+    }));
   }
 
 }

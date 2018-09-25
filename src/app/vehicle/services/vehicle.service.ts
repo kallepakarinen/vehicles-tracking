@@ -23,13 +23,10 @@ export class VehicleService {
 
 
   createVehicle(vehicle): Observable<Vehicle> {
-    console.log(vehicle);
     return this.vehicleHttpService.post(vehicle);
   }
 
   updateVehicle(vehicle): Observable<Vehicle> {
-    console.log('service');
-    console.log(vehicle);
     return this.vehicleHttpService.put(vehicle);
   }
 }

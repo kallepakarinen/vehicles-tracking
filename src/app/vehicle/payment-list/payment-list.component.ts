@@ -30,6 +30,7 @@ export class PaymentListComponent implements OnInit {
   colorScheme = {
     domain: ['#a8385d', '#7aa3e5', '#a27ea8', '#aae3f5', '#adcded', '#a95963', '#8796c0', '#7ed3ed', '#50abcc', '#ad6886']
   };
+
   allPaymentsChartData: ChartData[];
   payment: Payment;
   payments: Payment[];
@@ -41,7 +42,6 @@ export class PaymentListComponent implements OnInit {
   parts: ChartData;
   insurance: ChartData;
   tax: ChartData;
-  taxTotal;
   displayedColumns: string[] = ['day', 'kilometers', 'fuel', 'service', 'parts', 'insurance', 'tax', 'comment'];
   @ViewChild(MatSort) sort: MatSort;
 
@@ -59,38 +59,36 @@ export class PaymentListComponent implements OnInit {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Maksujen syöttö', []));
     this.route.params.subscribe(params => {
       this.vehicleId = params['id'];
+      console.log(this.vehicleId);
+      this.paymentService.getVehiclePayments(+this.vehicleId).subscribe(response => {
+        this.payments = response;
 
-      this.payments = this.paymentService.getVehiclePayments(+this.vehicleId);
-      /*this.serviceTotal = _.sumBy(response, 'service');
-      this.partsTotal = _.sumBy(response, 'parts');
-      this.insuranceTotal = _.sumBy(response, 'insurance');
-      this.taxTotal = _.sumBy(response, 'tax');
-      */
-      this.allPaymentsChartData = [];
-      this.fuel = new ChartData();
-      this.service = new ChartData();
-      this.parts = new ChartData();
-      this.insurance = new ChartData();
-      this.tax = new ChartData();
-      this.fuel.name = 'Polttoaine';
-      this.fuel.value = _.sumBy(this.payments, 'fuel') || 0;
+        this.dataSource = new MatTableDataSource(this.payments);
+        this.dataSource.sort = this.sort;
 
-      this.service.name = 'Huolto';
-      this.service.value = _.sumBy(this.payments, 'service') || 0;
+        this.allPaymentsChartData = [];
+        this.fuel = new ChartData();
+        this.service = new ChartData();
+        this.parts = new ChartData();
+        this.insurance = new ChartData();
+        this.tax = new ChartData();
+        this.fuel.name = 'Polttoaine';
+        this.fuel.value = _.sumBy(this.payments, 'fuel') || 0;
 
-      this.parts.name = 'Varaosat';
-      this.parts.value = _.sumBy(this.payments, 'parts') || 0;
+        this.service.name = 'Huolto';
+        this.service.value = _.sumBy(this.payments, 'service') || 0;
 
-      this.insurance.name = 'Vakuutukset';
-      this.insurance.value = _.sumBy(this.payments, 'insurance') || 0;
+        this.parts.name = 'Varaosat';
+        this.parts.value = _.sumBy(this.payments, 'parts') || 0;
 
-      this.tax.name = 'Verot';
-      this.tax.value = _.sumBy(this.payments, 'tax') || 0;
-      this.allPaymentsChartData.push(this.fuel, this.service, this.parts, this.insurance, this.tax);
+        this.insurance.name = 'Vakuutukset';
+        this.insurance.value = _.sumBy(this.payments, 'insurance') || 0;
 
-      this.dataSource = new MatTableDataSource(this.payments);
-      this.dataSource.sort = this.sort;
+        this.tax.name = 'Verot';
+        this.tax.value = _.sumBy(this.payments, 'tax') || 0;
+        this.allPaymentsChartData.push(this.fuel, this.service, this.parts, this.insurance, this.tax);
 
+      });
     });
   }
 
@@ -118,13 +116,13 @@ export class PaymentListComponent implements OnInit {
         this.payment.tax = this.paymentInput;
       }
       this.payment.vehicleId = Number(this.vehicleId);
-      this.paymentService.createPayment(this.payment);
+      this.paymentService.createPayment(this.payment).subscribe(response => {
+        this.ngOnInit();
+        this.dataSource = new MatTableDataSource(this.payments);
+      });
       this.openSnackBar();
-      this.payments = this.paymentService.getVehiclePayments(+this.vehicleId);
-      this.dataSource = new MatTableDataSource(this.payments);
       this.payment = new Payment();
       this.paymentInput = null;
-      this.ngOnInit();
     }
   }
 
@@ -135,7 +133,6 @@ export class PaymentListComponent implements OnInit {
       data: 'Aseta päivämäärä'
     });
   }
-
 
   openSnackBar() {
     this.snackBar.openFromComponent(NotificationSnackbarComponent, {

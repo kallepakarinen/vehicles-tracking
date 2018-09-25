@@ -36,16 +36,17 @@ export class VehiclesComponent implements OnInit {
     if (this.vehicleId !== null) {
       this.editingEnabled = true;
       this.vehicleService.getVehicleById(this.vehicleId).subscribe(response => {
-        console.log(response);
         this.vehicle = response;
       });
     }
   }
 
   onVehicleSave(): void {
-    this.vehicleService.createVehicle(this.vehicle).subscribe(response => {});
+    this.vehicleService.createVehicle(this.vehicle).subscribe(response => {
+      this.router.navigate(['/vehicles/']);
+    });
     this.openSnackBar();
-    this.router.navigate(['/vehicles/']);
+
   }
 
   OnVehicleUpdate(vehicle): void {
