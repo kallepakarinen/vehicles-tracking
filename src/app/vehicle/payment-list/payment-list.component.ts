@@ -52,7 +52,6 @@ export class PaymentListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.allPaymentsChartData = [];
     this.payment = new Payment();
-    // this.paymentInput = 0;
   }
 
   ngOnInit() {
@@ -87,7 +86,7 @@ export class PaymentListComponent implements OnInit {
         this.tax.name = 'Verot';
         this.tax.value = _.sumBy(this.payments, 'tax') || 0;
         this.allPaymentsChartData.push(this.fuel, this.service, this.parts, this.insurance, this.tax);
-
+console.log(this.allPaymentsChartData);
       });
     });
   }
