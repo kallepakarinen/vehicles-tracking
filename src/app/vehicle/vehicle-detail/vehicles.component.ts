@@ -17,6 +17,7 @@ export class VehiclesComponent implements OnInit {
   vehicles: Vehicle[];
   vehicleId: any;
   editingEnabled: boolean;
+  checked: boolean;
 
   constructor(@Inject(LOCALE_ID) private locale: string, private vehicleService: VehicleService,
               private router: Router, private route: ActivatedRoute,
@@ -24,21 +25,27 @@ export class VehiclesComponent implements OnInit {
     this.vehicle = new Vehicle();
     this.vehicles = [];
     this.editingEnabled = false;
+
   }
 
   ngOnInit() {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Lisää ajoneuvo', []));
-    this.vehicleId = this.route.snapshot.paramMap.get('id');
+
     this.vehicleService.getVehicles().subscribe(response => {
       this.vehicles = response;
     });
+    this.route.params.subscribe(params => {
+      this.vehicleId = params['id'];
+      console.log(this.vehicleId);
+      if (this.vehicleId !== undefined) {
+          this.editingEnabled = true;
+        this.vehicleService.getVehicleById(+this.vehicleId).subscribe(response => {
+          this.vehicle = response;
+          this.checked = this.vehicle.active;
+        });
+      }
+    });
 
-    if (this.vehicleId !== null) {
-      this.editingEnabled = true;
-      this.vehicleService.getVehicleById(this.vehicleId).subscribe(response => {
-        this.vehicle = response;
-      });
-    }
   }
 
   onVehicleSave(): void {
@@ -46,14 +53,15 @@ export class VehiclesComponent implements OnInit {
       this.router.navigate(['/vehicles/']);
     });
     this.openSnackBar();
-
   }
 
   OnVehicleUpdate(vehicle): void {
-   this.vehicleService.updateVehicle(vehicle).subscribe(response => {
-     vehicle = response;
-     this.router.navigate(['/vehicles/new']);
-   });
+    this.changed();
+    console.log(this.vehicle);
+    this.vehicleService.updateVehicle(vehicle).subscribe(response => {
+      vehicle = response;
+      this.router.navigate(['/vehicles/new']);
+    });
   }
 
   openSnackBar() {
@@ -65,7 +73,10 @@ export class VehiclesComponent implements OnInit {
 
   onVehicleSelect(vehicle) {
     this.router.navigate(['/vehicles/' + vehicle.id]);
-   // this.ngOnInit();
+    // this.ngOnInit();
   }
 
+  changed() {
+    this.vehicle.active = this.checked;
+  }
 }

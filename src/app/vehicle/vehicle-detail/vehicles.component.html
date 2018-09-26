@@ -36,13 +36,15 @@
                placeholder="Jälleenmyyntiarvo">
       </mat-form-field>
 
+        <mat-slide-toggle
+          [(ngModel)]="checked"
+          (change)="changed()">
+          {{checked}}
+        </mat-slide-toggle>
+
+
       <button mat-raised-button color="accent" matTooltip="Tallenna" *ngIf="!editingEnabled" (click)="onVehicleSave()">
         <mat-icon>save</mat-icon>
-      </button>
-
-      <button mat-raised-button color="accent" matTooltip="Poista käytöstä" *ngIf="editingEnabled"
-              (click)="onDeleteVehicle()">
-        <mat-icon>delete</mat-icon>
       </button>
 
       <button mat-raised-button color="accent" matTooltip="Muokkaa" *ngIf="editingEnabled" (click)="OnVehicleUpdate(vehicle)">
