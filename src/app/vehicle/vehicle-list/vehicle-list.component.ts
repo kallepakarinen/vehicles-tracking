@@ -16,7 +16,6 @@ export class VehicleListComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.vehicleService.getVehicles().subscribe(response => {
       this.vehicles = response.filter(i => i.active === true);
     });

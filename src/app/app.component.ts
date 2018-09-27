@@ -7,9 +7,10 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  year: any;
 
   constructor(private router: Router) {
+    this.year = new Date().getFullYear();
   }
 
   createNewVehicle(): void {
@@ -17,6 +18,6 @@ export class AppComponent {
   }
 
   report(): void {
-    this.router.navigate(['/reports']);
+    this.router.navigate(['/reports/' + this.year]);
   }
 }
