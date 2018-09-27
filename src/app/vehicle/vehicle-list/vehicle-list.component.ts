@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Vehicle} from '../Vehicle';
 import {VehicleService} from '../services/vehicle.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -11,13 +11,14 @@ import {Router} from '@angular/router';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
 
-  constructor(private vehicleService: VehicleService, private router: Router) {
+  constructor(private vehicleService: VehicleService, private router: Router, private route: ActivatedRoute) {
     this.vehicles = [];
   }
 
   ngOnInit() {
+
     this.vehicleService.getVehicles().subscribe(response => {
-      this.vehicles = response;
+      this.vehicles = response.filter(i => i.active === true);
     });
   }
 

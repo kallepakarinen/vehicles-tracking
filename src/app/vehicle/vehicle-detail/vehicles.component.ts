@@ -25,12 +25,11 @@ export class VehiclesComponent implements OnInit {
     this.vehicle = new Vehicle();
     this.vehicles = [];
     this.editingEnabled = false;
-
+    this.checked = true;
   }
 
   ngOnInit() {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Lisää ajoneuvo', []));
-
     this.vehicleService.getVehicles().subscribe(response => {
       this.vehicles = response;
     });
@@ -45,12 +44,11 @@ export class VehiclesComponent implements OnInit {
         });
       }
     });
-
   }
 
   onVehicleSave(): void {
     this.vehicleService.createVehicle(this.vehicle).subscribe(response => {
-      this.router.navigate(['/vehicles/']);
+      this.ngOnInit();
     });
     this.openSnackBar();
   }
@@ -73,7 +71,6 @@ export class VehiclesComponent implements OnInit {
 
   onVehicleSelect(vehicle) {
     this.router.navigate(['/vehicles/' + vehicle.id]);
-    // this.ngOnInit();
   }
 
   changed() {
