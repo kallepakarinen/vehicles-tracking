@@ -14,7 +14,8 @@ import {NotificationSnackbarComponent} from '../notifications/notification-snack
 })
 export class VehiclesComponent implements OnInit {
   vehicle: Vehicle;
-  vehicles: Vehicle[];
+  activeVehicles: Vehicle[];
+  disableVehicles: Vehicle[];
   vehicleId: any;
   editingEnabled: boolean;
   checked: boolean;
@@ -23,7 +24,8 @@ export class VehiclesComponent implements OnInit {
               private router: Router, private route: ActivatedRoute,
               private toolbar: ToolbarService, public snackBar: MatSnackBar) {
     this.vehicle = new Vehicle();
-    this.vehicles = [];
+    this.activeVehicles = [];
+    this.disableVehicles = [];
     this.editingEnabled = false;
     this.checked = true;
   }
@@ -31,7 +33,8 @@ export class VehiclesComponent implements OnInit {
   ngOnInit() {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Lisää ajoneuvo', []));
     this.vehicleService.getVehicles().subscribe(response => {
-      this.vehicles = response;
+      this.activeVehicles = response.filter(i => i.active === true);
+      this.disableVehicles = response.filter(i => i.active === false);
     });
     this.route.params.subscribe(params => {
       this.vehicleId = params['id'];

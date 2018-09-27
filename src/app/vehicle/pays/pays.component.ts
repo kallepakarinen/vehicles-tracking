@@ -36,7 +36,6 @@ export class PaysComponent implements OnInit {
         this.payment = response;
       });
     }
-    //   this.vehicleId = this.route.snapshot.paramMap.get('vehicle');
   }
 
   updatePayment(payment): void {
