@@ -23,7 +23,8 @@ export class AllPaymentsComponent implements OnInit {
   pieChartColors = [
     'rgba(255, 99, 132, 1)',
     'rgba(54, 162, 235, 1)',
-    'rgba(255, 206, 86, 1)'
+    'rgba(255, 206, 86, 1)',
+    'rgba(255, 111, 86, 1)'
   ];
 
   payments: Payment[];
@@ -46,7 +47,6 @@ export class AllPaymentsComponent implements OnInit {
   // vehicles payment
 
 
-
   vehicleFuelTotal;
   vehicleServiceTotal;
   vehicleCount;
@@ -64,17 +64,27 @@ export class AllPaymentsComponent implements OnInit {
   insuranceVehicleSum: number;
   taxVehicleSum: number;
 
-
+  year: any;
   // sums
   vehicleTotalSum: number[];
-  quarta1TotalSum:number[] ;
+  quartalSum: number[];
+  Q1: number[];
+  Q2: number[];
+  quartalTotalSum: any;
+  summa: number[];
+
   constructor(private reportService: ReportService, private route: ActivatedRoute, private vehicleService: VehicleService) {
     this.payments = [];
     this.vehicles = [];
     this.quartals = new ReportPayment();
     this.vehicleTotalSum = [];
     this.quartalPayments = [];
-    this.quarta1TotalSum = [];
+    this.quartalSum = [];
+    this.quartalTotalSum = [];
+    this.Q1 = [];
+    this.Q2 = [];
+    this.summa = [];
+    this.year = new Date().getFullYear();
   }
 
 
@@ -85,17 +95,18 @@ export class AllPaymentsComponent implements OnInit {
     /*  this.vehicleService.getVehicles().subscribe(response => {
         this.vehicleCount = _.size(response);
       });*/
+
     //////////////////// Quarted sum filter
+    const year = this.year;
+    console.log(year);
+
     function q1(payment) {
-      return payment.day >= '2018-09-01' && payment.day <= '2018-09-30';
+      return payment.day >= year + '-09-01' && payment.day <= year + '-09-30';
     }
+
     function q2(payment) {
-      return payment.day >= '2018-10-01' && payment.day <= '2018-10-30';
+      return payment.day >= year + '-10-01' && payment.day <= year + '2018-10-31';
     }
-    this.quartalPayments = this.totalPayments.filter(q1);
-    console.log(this.quartalPayments);
-
-
 
     for (this.i = 0; this.i < this.vehicleCount; this.i++) {
       // get vehicles mark and name. uses pie charts.
@@ -103,13 +114,26 @@ export class AllPaymentsComponent implements OnInit {
       this.charLabel.push(vehicleName);
 
       // quartals
-      this.fuelQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'fuel') || 0;
-      this.partsQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
-      this.serviceQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'service') || 0;
-      this.insuranceQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
-      this.taxQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
-      this.quarta1TotalSum.push(this.fuelQuartal + this.partsQuartal + this.serviceQuartal + this.insuranceQuartal + this.taxQuartal);
-      console.log(this.quarta1TotalSum);
+      for (let q = 0; q < 2; q++) {
+        if (q === 0) {
+          this.quartalPayments = this.totalPayments.filter(q1);
+        }
+        if (q === 1) {
+          this.quartalPayments = this.totalPayments.filter(q2);
+        }
+
+        this.fuelQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'fuel') || 0;
+        this.partsQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
+        this.serviceQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'service') || 0;
+        this.insuranceQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
+        this.taxQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
+        if (q === 0) {
+          this.Q1.push(this.fuelQuartal + this.partsQuartal + this.serviceQuartal + this.insuranceQuartal + this.taxQuartal);
+        }
+        if (q === 1) {
+          this.Q2.push(this.fuelQuartal + this.partsQuartal + this.serviceQuartal + this.insuranceQuartal + this.taxQuartal);
+        }
+      }
 
 
       // get vehicles sum for payments
@@ -118,13 +142,11 @@ export class AllPaymentsComponent implements OnInit {
       this.partsVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
       this.insuranceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
       this.taxVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
-      this.vehicleTotalSum.push(this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
+      this.vehicleTotalSum.push(
+        this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
     }
-
-
-
-
-
+    // this.quartalTotalSum.push([this.quartalSum]);
+    console.log(this.quartalTotalSum);
 
 
     // this.vehicleFilter = _.filter(response, {'vehicleId': this.i});
@@ -136,6 +158,35 @@ export class AllPaymentsComponent implements OnInit {
     //  this.fuelTotal = _.sumBy(response, 'fuel');
 
 
+// Quartal Chart
+    for (let j = 1; j <= 2; j++) {
+      if (j === 1) {
+        this.summa = this.Q1;
+      }
+      if (j === 2) {
+        this.summa = this.Q2;
+      }
+      this.canvas = document.getElementById('quartal' + [j]);
+      this.ctx = this.canvas.getContext('2d');
+      this.myChart = new Chart(this.ctx, {
+        type: 'pie',
+        data: {
+          labels: this.charLabel,
+          datasets: [{
+            label: 'sum of qartals',
+            data: this.summa,
+            backgroundColor: this.pieChartColors,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: false,
+          display: true,
+        }
+      });
+    }
+
+    // total Chart
     this.canvas = document.getElementById('vehiclesTotal');
     this.ctx = this.canvas.getContext('2d');
     this.myChart = new Chart(this.ctx, {
@@ -150,34 +201,14 @@ export class AllPaymentsComponent implements OnInit {
         }]
       },
       options: {
+        tooltips: {
+          mode: 'point',
+          intersect: false,
+        },
         responsive: false,
         display: true
       }
     });
-
-
-    this.canvas = document.getElementById('quartal');
-    this.ctx = this.canvas.getContext('2d');
-    this.myChart = new Chart(this.ctx, {
-      type: 'pie',
-      data: {
-        labels: this.charLabel,
-        datasets: [{
-          label: 'sum of qartals',
-          data: this.quarta1TotalSum,
-          backgroundColor: this.pieChartColors,
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: false,
-        display: true
-      }
-    });
-
-
-
-
 
 
     this.quartals.fuel = this.fuelQuartal;
@@ -185,7 +216,7 @@ export class AllPaymentsComponent implements OnInit {
     this.quartals.service = this.serviceQuartal;
     this.quartals.insurance = this.insuranceQuartal;
     this.quartals.tax = this.taxQuartal;
-///////////////////////////
+
   }
 }
 
