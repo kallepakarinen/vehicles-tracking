@@ -13,15 +13,15 @@ import {RouterModule, Routes} from '@angular/router';
 import {PaymentListComponent} from './vehicle/payment-list/payment-list.component';
 import {PaymentHttpService} from './vehicle/services/payment-http.service';
 
-import { PaysComponent } from './vehicle/pays/pays.component';
+import {PaysComponent} from './vehicle/pays/pays.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PaymentService} from './vehicle/services/payment.service';
-import { AllPaymentsComponent } from './vehicle/payment-reports/all-payments/all-payments.component';
+import {AllPaymentsComponent} from './vehicle/payment-reports/all-payments/all-payments.component';
 import {ReportHttpService} from './vehicle/payment-reports/report-services/report-http.service';
 import {CovalentLayoutModule} from '@covalent/core';
 import {CommonModule} from '@angular/common';
 import {LocalStorageService} from './vehicle/services/local-storage.service';
-import { DateFormatPipe } from './vehicle/pipes/date-format.pipe';
+import {DateFormatPipe} from './vehicle/pipes/date-format.pipe';
 
 const appRoutes: Routes = [
   {path: 'vehicles', component: VehicleListComponent},
