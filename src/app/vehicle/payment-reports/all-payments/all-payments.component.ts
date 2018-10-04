@@ -17,9 +17,14 @@ export class AllPaymentsComponent implements OnInit {
   // Vehicles
   vehicles: Vehicle[];
 
-  // Canvas
+  // Canvas pie chart
   canvas: any;
   ctx: any;
+  pieChartColors = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)'
+  ];
 
   payments: Payment[];
   // sum all payments
@@ -31,13 +36,15 @@ export class AllPaymentsComponent implements OnInit {
   taxTotal: number;
   // Quartals
   quartals: ReportPayment;
+  quartalPayments: Payment[];
+
   fuelQuartal: number;
   partsQuartal: number;
   serviceQuartal: number;
   insuranceQuartal: number;
   taxQuartal: number;
   // vehicles payment
-  fuelVPayment: number;
+
 
 
   vehicleFuelTotal;
@@ -56,46 +63,69 @@ export class AllPaymentsComponent implements OnInit {
   partsVehicleSum: number;
   insuranceVehicleSum: number;
   taxVehicleSum: number;
-  totalVehiclePayments: number;
-  vehicleTotalSum: number[];
 
+
+  // sums
+  vehicleTotalSum: number[];
+  quarta1TotalSum:number[] ;
   constructor(private reportService: ReportService, private route: ActivatedRoute, private vehicleService: VehicleService) {
     this.payments = [];
     this.vehicles = [];
     this.quartals = new ReportPayment();
     this.vehicleTotalSum = [];
+    this.quartalPayments = [];
+    this.quarta1TotalSum = [];
   }
 
 
   ngOnInit() {
-    /*  this.vehicleService.getVehicles().subscribe(response => {
-        this.vehicleCount = _.size(response);
-      });*/
     this.vehicles = this.vehicleService.getVehicles();
     this.vehicleCount = _.size(this.vehicles);
     this.totalPayments = this.reportService.getAllPayments();
+    /*  this.vehicleService.getVehicles().subscribe(response => {
+        this.vehicleCount = _.size(response);
+      });*/
+    //////////////////// Quarted sum filter
+    function q1(payment) {
+      return payment.day >= '2018-09-01' && payment.day <= '2018-09-30';
+    }
+    function q2(payment) {
+      return payment.day >= '2018-10-01' && payment.day <= '2018-10-30';
+    }
+    this.quartalPayments = this.totalPayments.filter(q1);
+    console.log(this.quartalPayments);
+
+
 
     for (this.i = 0; this.i < this.vehicleCount; this.i++) {
       // get vehicles mark and name. uses pie charts.
-      const vehicleName = this.vehicles[this.i].mark + '-' + this.vehicles[this.i].registration;
+      const vehicleName = this.vehicles[this.i].mark + ' ' + this.vehicles[this.i].registration;
       this.charLabel.push(vehicleName);
-      // get vehicles sum payments or something
+
+      // quartals
+      this.fuelQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'fuel') || 0;
+      this.partsQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
+      this.serviceQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'service') || 0;
+      this.insuranceQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
+      this.taxQuartal = _.sumBy(this.quartalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
+      this.quarta1TotalSum.push(this.fuelQuartal + this.partsQuartal + this.serviceQuartal + this.insuranceQuartal + this.taxQuartal);
+      console.log(this.quarta1TotalSum);
+
+
+      // get vehicles sum for payments
       this.fuelVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'fuel') || 0;
       this.serviceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'service') || 0;
       this.partsVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'parts') || 0;
       this.insuranceVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'insurance') || 0;
       this.taxVehicleSum = _.sumBy(this.totalPayments.filter(vehicleId => vehicleId.vehicleId === this.i + 1), 'tax') || 0;
-      this.totalVehiclePayments = this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum;
-      this.vehicleTotalSum.push(this.totalVehiclePayments);
+      this.vehicleTotalSum.push(this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum);
     }
 
-    console.log(this.vehicleTotalSum);
 
 
-    this.totalVehiclePayments = this.fuelVehicleSum + this.serviceVehicleSum + this.partsVehicleSum + this.insuranceVehicleSum + this.taxVehicleSum;
-    console.log(this.totalVehiclePayments);
-    console.log(this.serviceVehicleSum);
-    console.log(this.fuelVehicleSum);
+
+
+
 
     // this.vehicleFilter = _.filter(response, {'vehicleId': this.i});
     this.fuelTotal = _.sumBy(this.totalPayments, 'fuel');
@@ -115,11 +145,7 @@ export class AllPaymentsComponent implements OnInit {
         datasets: [{
           label: 'sum of Cars',
           data: this.vehicleTotalSum,
-          backgroundColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)'
-          ],
+          backgroundColor: this.pieChartColors,
           borderWidth: 1
         }]
       },
@@ -130,16 +156,29 @@ export class AllPaymentsComponent implements OnInit {
     });
 
 
-    //////////////////// Quarted sum filter
-    function q1(payment) {
-      return payment.day >= '2018-09-01' && payment.day <= '2018-09-30';
-    }
+    this.canvas = document.getElementById('quartal');
+    this.ctx = this.canvas.getContext('2d');
+    this.myChart = new Chart(this.ctx, {
+      type: 'pie',
+      data: {
+        labels: this.charLabel,
+        datasets: [{
+          label: 'sum of qartals',
+          data: this.quarta1TotalSum,
+          backgroundColor: this.pieChartColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        display: true
+      }
+    });
 
-    this.fuelQuartal = _.sumBy(this.totalPayments.filter(q1), 'fuel');
-    this.partsQuartal = _.sumBy(this.totalPayments.filter(q1), 'parts');
-    this.serviceQuartal = _.sumBy(this.totalPayments.filter(q1), 'service');
-    this.insuranceQuartal = _.sumBy(this.totalPayments.filter(q1), 'insurance');
-    this.taxQuartal = _.sumBy(this.totalPayments.filter(q1), 'tax');
+
+
+
+
 
     this.quartals.fuel = this.fuelQuartal;
     this.quartals.parts = this.partsQuartal;

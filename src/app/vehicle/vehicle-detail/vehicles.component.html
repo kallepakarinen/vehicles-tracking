@@ -17,16 +17,23 @@
 
       <mat-form-field fxFlex>
         <input matInput [(ngModel)]="vehicle.acquisitionDay"
-               type="text"
+               type="date"
                required
                placeholder="Ostopäivä">
       </mat-form-field>
 
       <mat-form-field fxFlex>
         <input matInput [(ngModel)]="vehicle.prise"
-               type="text"
+               type="number"
                required
                placeholder="Hinta">
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <input matInput [(ngModel)]="vehicle.resaleValue"
+               type="number"
+               required
+               placeholder="Jälleenmyyntiarvo">
       </mat-form-field>
       <button mat-raised-button color="accent" matTooltip="Tallenna ajoneuvon tiedot" (click)="onSave()">Tallenna</button>
     </div>
