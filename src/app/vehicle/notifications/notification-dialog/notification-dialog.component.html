@@ -1,6 +1,8 @@
 <div color="accent">
   <mat-dialog-content>{{data}}</mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Ok</button>
+    <button mat-button (click)="dialogRef.close(false)">En</button>
+    <button mat-button (click)="dialogRef.close(true)">Ok</button>
   </mat-dialog-actions>
 </div>
+

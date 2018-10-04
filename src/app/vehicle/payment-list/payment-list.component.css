@@ -8,3 +8,15 @@ th.mat-sort-header-sorted {
   float:right;
   margin: 10px;
 }
+.pay-card {
+  padding-left: 24px;
+}
+.chart-card {
+width: 100%;
+}
+.table-div{
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:20px;
+}
+.pointer {cursor: pointer;}

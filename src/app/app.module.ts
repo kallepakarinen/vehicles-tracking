@@ -27,6 +27,7 @@ import { NotificationSnackbarComponent } from './vehicle/notifications/notificat
 import { ToolbarComponent } from './vehicle/ui/toolbar/toolbar.component';
 import {ToolbarService} from './vehicle/ui/toolbar/toolbar.service';
 import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { InfoComponent } from './vehicle/info/info.component';
 
 
 const appRoutes: Routes = [
@@ -51,7 +52,8 @@ const appRoutes: Routes = [
     DateFormatPipe,
     NotificationDialogComponent,
     NotificationSnackbarComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,55 +1,53 @@
-<div fxLayout="row" fxLayoutAlign="start none">
-  <mat-card fxFlex class="cw-card-layout" class="vehicleCard">
-    <div fxLayout="column" fxLayoutAlign="start start">
-      <mat-form-field fxFlex>
-        <input matInput [(ngModel)]="vehicle.registration"
-               type="text"
-               required
-               placeholder="Rekisterinumero">
-      </mat-form-field>
+<div fxLayout="row" fxLayoutAlign="none">
+<div fxLayout="column" fxLayoutAlign="none">
+  <mat-card class="vehicle-card">
+    <mat-form-field>
+      <input matInput [(ngModel)]="vehicle.registration"
+             type="text"
+             required
+             placeholder="Rekisterinumero">
+    </mat-form-field>
 
-      <mat-form-field fxFlex>
-        <input matInput [(ngModel)]="vehicle.mark"
-               type="text"
-               required
-               placeholder="Merkki">
-      </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="vehicle.mark"
+             type="text"
+             required
+             placeholder="Merkki">
+    </mat-form-field>
 
-      <mat-form-field fxFlex>
-        <input matInput [(ngModel)]="vehicle.acquisitionDay"
-               type="date"
-               required
-               placeholder="Ostopäivä">
-      </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="vehicle.acquisitionDay"
+             type="date"
+             required
+             placeholder="Ostopäivä">
+    </mat-form-field>
 
-      <mat-form-field fxFlex>
-        <input matInput [(ngModel)]="vehicle.prise"
-               type="number"
-               required
-               placeholder="Hinta">
-      </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="vehicle.prise"
+             type="number"
+             required
+             placeholder="Hinta">
+    </mat-form-field>
 
-      <mat-form-field fxFlex>
-        <input matInput [(ngModel)]="vehicle.resaleValue"
-               type="number"
-               required
-               placeholder="Jälleenmyyntiarvo">
-      </mat-form-field>
-      <button mat-raised-button color="accent" matTooltip="Tallenna ajoneuvon tiedot" (click)="onSave()">Tallenna</button>
-    </div>
-  </mat-card>
-
-  <mat-card fxFlex class="vehicleCard">
-    <mat-card-title>Menot yhteensä</mat-card-title>
-    <p>Kilometrit: {{kilometersTotal}}</p>
-    <p>Polttoaine: {{fuelTotal}}</p>
-    <p>Huolto: {{serviceTotal}}</p>
-    <p>Varaosat: {{partsTotal}}</p>
-    <p>Vakuutukset: {{insuranceTotal}}</p>
-    <p>Verot: {{taxTotal}}</p>
+    <mat-form-field>
+      <input matInput [(ngModel)]="vehicle.resaleValue"
+             type="number"
+             required
+             placeholder="Jälleenmyyntiarvo">
+    </mat-form-field>
+    <button mat-raised-button color="accent" matTooltip="Tallenna" (click)="onSave()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-raised-button color="accent" matTooltip="Muokkaa" (click)="onUpdateVehicle()"> Muokkaa</button>
   </mat-card>
 </div>
-  <app-payment-list></app-payment-list>
 
-
-
+<div>
+  <mat-list matTooltip="Valitse Muokattava ajoneuvo" fxLayout="column" fxLayoutAlign="space-between none">
+    <mat-list-item *ngFor="let vehicle of vehicles" (click)="onVehicleSelect(vehicle)">
+      <p class="pointer">{{vehicle.registration}}_
+        {{vehicle.mark}}</p>
+    </mat-list-item>
+  </mat-list>
+</div>
+</div>

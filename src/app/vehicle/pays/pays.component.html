@@ -1,4 +1,4 @@
-<mat-card class="payCard">
+<mat-card class="pay-card">
   <mat-card-header>
     <mat-card-title>Lisää uusi maksu</mat-card-title>
   </mat-card-header>
@@ -57,8 +57,8 @@
            required
            placeholder="Kommentti">
   </mat-form-field>
-  <button mat-raised-button (click)="updatePayment(payment)">Muokkaa</button>
-  <button mat-raised-button (click)="createPayment(payment)">Tallenna</button>
+  <button mat-raised-button color="accent" matTooltip="Muokkaa maksua" (click)="updatePayment(payment)"><mat-icon>update</mat-icon></button>
+  <button mat-raised-button color="accent" matTooltip="Poista maksu" (click)="deletePayment(payment)"><mat-icon>delete</mat-icon></button>
 </mat-card>
 
 
