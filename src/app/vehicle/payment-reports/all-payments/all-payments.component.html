@@ -1,44 +1,72 @@
-<button mat-button (click)="test()">test</button>
-
-<div><h2>Menot yhteensä</h2>
-  <canvas id="vehiclesTotal" width="700" height="400"></canvas>
+<div>
+  <ngx-charts-pie-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="allPaymentsChartData"
+    [gradient]="gradient"
+    [labels]="true"
+    [legend]="true"
+    [legendTitle]="Legend"
+    [trimLabels]="true"
+    [maxLabelLength]="20"
+    (select)="onSelect($event)">
+  </ngx-charts-pie-chart>
 </div>
 
-<div fxLayout="row" fxLayoutAlign="start start" >
-  <div>
-    <h2>1 Kvartaali</h2>
-    <canvas id="quartal1" width="220" height="190"></canvas>
-  </div>
-  <div>
-    <h2>2 Kvartaali</h2>
-    <canvas id="quartal2" width="220" height="190"></canvas>
-  </div>
-</div>
-<!--
 
 <div>
-  <mat-card>
-    <mat-card-title>Menot yhteensä</mat-card-title>
-    <p>Polttoaine: {{fuelTotal}}</p>
-    <p>Huolto: {{serviceTotal}}</p>
-    <p>Varaosat: {{partsTotal}}</p>
-    <p>Vakuutukset: {{insuranceTotal}}</p>
-    <p>Verot: {{taxTotal}}</p>
-    <p>Yhteensä: {{total}}</p>
-  </mat-card>
+  <ngx-charts-advanced-pie-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="allPaymentsChartData"
+    [gradient]="gradient"
+    (select)="onSelect($event)">
+  </ngx-charts-advanced-pie-chart>
+</div>
+
+
+
+<!--
+
+<div fxLayout="row" fxLayoutAlign="center none" >
+  <div>
+    <ngx-charts-advanced-pie-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="quartalPaymentsChartData1"
+      [gradient]="gradient"
+      (select)="onSelect($event)">
+    </ngx-charts-advanced-pie-chart>
+  </div>
 
   <div>
-    <mat-card>
-      <mat-card-title>q1</mat-card-title>
-      <p>Polttoaine: {{fuelTotal}}</p>
-    </mat-card>
-
-    <mat-card>
-      <mat-card-title>Auto 1</mat-card-title>
-      <p>Polttoaine: {{vehicleFuelTotal}}</p>
-      <p>Huolto: {{vehicleServiceTotal}}</p>
-    </mat-card>
+    <ngx-charts-advanced-pie-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="quartalPaymentsChartData2"
+      [gradient]="gradient"
+      (select)="onSelect($event)">
+    </ngx-charts-advanced-pie-chart>
   </div>
+
+  <div>
+    <ngx-charts-advanced-pie-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="quartalPaymentsChartData3"
+      [gradient]="gradient"
+      (select)="onSelect($event)">
+    </ngx-charts-advanced-pie-chart>
+  </div>
+
+  <div>
+    <ngx-charts-advanced-pie-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="quartalPaymentsChartData4"
+      [gradient]="gradient"
+      (select)="onSelect($event)">
+    </ngx-charts-advanced-pie-chart>
+  </div>
+</div>
 -->
-
-

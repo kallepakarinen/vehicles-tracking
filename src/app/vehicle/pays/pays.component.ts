@@ -5,6 +5,8 @@ import {PaymentService} from '../services/payment.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {NotificationDialogComponent} from '../notifications/notification-dialog/notification-dialog.component';
 import {NotificationSnackbarComponent} from '../notifications/notification-snackbar/notification-snackbar.component';
+import {ToolbarService} from '../ui/toolbar/toolbar.service';
+import {ToolbarOptions} from '../ui/toolbar/toolbar-options';
 
 @Component({
   selector: 'app-pays',
@@ -19,11 +21,13 @@ export class PaysComponent implements OnInit {
 
   constructor(@Inject(LOCALE_ID) private locale: string,
               private route: ActivatedRoute, private router: Router, private paymentService:
-                PaymentService, public dialog: MatDialog, public snackBar: MatSnackBar) {
+                PaymentService, public dialog: MatDialog, public snackBar: MatSnackBar,
+              private toolbar: ToolbarService) {
     this.payment = new Payment();
   }
 
   ngOnInit() {
+    // this.toolbar.setToolbarOptions(new ToolbarOptions(false, 'Contacts', []));
     this.paymentId = this.route.snapshot.paramMap.get('id');
     if (this.paymentId !== null) {
       this.payment = this.paymentService.getPaymentById(+this.paymentId);

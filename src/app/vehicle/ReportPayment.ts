@@ -1,19 +1,30 @@
 export class ReportPayment {
-  fuel: number;
-  service: number;
-  parts: number;
-  insurance: number;
-  tax: number;
+  vehicleId: number;
+  vehicleName: string;
+  fuel: any[];
+  service: any[];
+  parts: any[];
+  insurance: any[];
+  tax: any[];
+  yearlySum: number;
+  quarterlySum: any[];
 
   constructor(
-    fuel?: number,
-    service?: number, parts?: number,
-    insurance?: number, tax?: number,
+    vehicleId?: number,
+    vehicleName?: string,
+    fuel?: any[],
+    service?: any[], parts?: any[],
+    insurance?: any[], tax?: any[],
+    yearlySum?: number, quarterlySum?: any[]
   ) {
-    this.fuel = fuel;
-    this.service = service;
-    this.parts = parts;
-    this.insurance = insurance;
-    this.tax = tax;
+    this.vehicleId = vehicleId;
+    this.vehicleName = vehicleName;
+    this.fuel = fuel || [];
+    this.service = service || [];
+    this.parts = parts || [];
+    this.insurance = insurance || [];
+    this.tax = tax || [];
+    this.yearlySum = yearlySum;
+    this.quarterlySum = quarterlySum || [];
   }
 }
