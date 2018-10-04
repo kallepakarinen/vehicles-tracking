@@ -1,4 +1,13 @@
-<div fxLayout="column" fxLayoutAlign=" center">
+<div class="report-content">
+<mat-form-field>
+  <mat-select (ngModelChange)="onSelectYear($event)" placeholder="Vuosi" [(ngModel)]="selectedValue" >
+    <mat-option *ngFor="let year of years" [value]="year.value">
+      {{year.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div fxLayout="column" fxLayoutAlign="none" class="chart">
   <h1>Vuosikulut</h1>
   <ngx-charts-advanced-pie-chart
     [view]="view"
@@ -9,7 +18,7 @@
   </ngx-charts-advanced-pie-chart>
 </div>
 
-<div fxLayout="row" fxLayoutAlign="center none">
+<div fxLayout="row" fxLayoutAlign="none" class="chart">
   <div class="quartal-div">
     <h1>1-Kvartaali</h1>
     <ngx-charts-pie-chart
@@ -37,7 +46,7 @@
   </div>
 </div>
 
-<div fxLayout="row" fxLayoutAlign="center none">
+<div fxLayout="row" fxLayoutAlign="none" class="chart">
   <div class="quartal-div">
     <h1>3-Kvartaali</h1>
     <ngx-charts-pie-chart
@@ -62,6 +71,7 @@
       (select)="onSelect($event)">
     </ngx-charts-pie-chart>
   </div>
+</div>
 </div>
 
 

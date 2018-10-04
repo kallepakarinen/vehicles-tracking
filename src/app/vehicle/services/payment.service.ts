@@ -35,8 +35,8 @@ export class PaymentService {
     return this.paymentHttpService.deletePayment(payment);
   }
 
-  paymentReport(): Observable<ReportPayment[]> {
-    return this.paymentHttpService.reportPayment();
+  paymentReport(year): Observable<ReportPayment[]> {
+    return this.paymentHttpService.reportPayment(year);
   }
 
 }

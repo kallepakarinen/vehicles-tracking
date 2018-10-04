@@ -37,7 +37,7 @@ const appRoutes: Routes = [
   {path: 'payments/:id', component: PaymentListComponent},
   {path: 'pays/:id', component: PaysComponent},
   {path: 'pays/new/:vehicle', component: PaysComponent},
-  {path: 'reports', component: AllPaymentsComponent},
+  {path: 'reports/:year', component: AllPaymentsComponent},
   {path: '', redirectTo: '/vehicles', pathMatch: 'full'}
 ];
 

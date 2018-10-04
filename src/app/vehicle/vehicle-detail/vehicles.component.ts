@@ -19,6 +19,7 @@ export class VehiclesComponent implements OnInit {
   vehicleId: any;
   editingEnabled: boolean;
   checked: boolean;
+  slideText = '';
 
   constructor(@Inject(LOCALE_ID) private locale: string, private vehicleService: VehicleService,
               private router: Router, private route: ActivatedRoute,
@@ -27,7 +28,6 @@ export class VehiclesComponent implements OnInit {
     this.activeVehicles = [];
     this.disableVehicles = [];
     this.editingEnabled = false;
-    this.checked = true;
   }
 
   ngOnInit() {
@@ -38,18 +38,25 @@ export class VehiclesComponent implements OnInit {
     });
     this.route.params.subscribe(params => {
       this.vehicleId = params['id'];
-      console.log(this.vehicleId);
       if (this.vehicleId !== undefined) {
-          this.editingEnabled = true;
+        this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Muokkaa tietoja', []));
+        this.editingEnabled = true;
         this.vehicleService.getVehicleById(+this.vehicleId).subscribe(response => {
           this.vehicle = response;
           this.checked = this.vehicle.active;
+          if (this.checked === true) {
+            console.log(this.checked);
+            this.slideText = 'Ajoneuvo  on käytössä';
+          } else {
+            this.slideText = 'ajoneuvo on poistettu käytöstä';
+          }
         });
       }
     });
   }
 
   onVehicleSave(): void {
+    this.vehicle.active = true;
     this.vehicleService.createVehicle(this.vehicle).subscribe(response => {
       this.ngOnInit();
     });
@@ -78,5 +85,10 @@ export class VehiclesComponent implements OnInit {
 
   changed() {
     this.vehicle.active = this.checked;
+    if (this.checked === true) {
+      this.slideText = 'Ajoneuvo  on käytössä';
+    } else {
+      this.slideText = 'ajoneuvo on poistettu käytöstä';
+    }
   }
 }

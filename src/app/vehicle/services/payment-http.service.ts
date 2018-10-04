@@ -44,8 +44,9 @@ export class PaymentHttpService {
   deletePayment(payment): Observable<any> {
     return this.httpClient.delete(this.url + '/' + payment.id);
   }
-  reportPayment(): Observable<ReportPayment[]> {
-    return this.httpClient.get(this.url + '/report').pipe(map(response => {
+  reportPayment(year): Observable<ReportPayment[]> {
+    console.log(year);
+    return this.httpClient.get(this.url + '/report/' + year).pipe(map(response => {
       return response as ReportPayment[];
     }));
   }
