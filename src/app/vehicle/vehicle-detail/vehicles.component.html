@@ -36,13 +36,15 @@
                placeholder="Jälleenmyyntiarvo">
       </mat-form-field>
 
+        <mat-slide-toggle
+          [(ngModel)]="checked"
+          (change)="changed()">
+          {{checked}}
+        </mat-slide-toggle>
+
+
       <button mat-raised-button color="accent" matTooltip="Tallenna" *ngIf="!editingEnabled" (click)="onVehicleSave()">
         <mat-icon>save</mat-icon>
-      </button>
-
-      <button mat-raised-button color="accent" matTooltip="Poista käytöstä" *ngIf="editingEnabled"
-              (click)="onDeleteVehicle()">
-        <mat-icon>delete</mat-icon>
       </button>
 
       <button mat-raised-button color="accent" matTooltip="Muokkaa" *ngIf="editingEnabled" (click)="OnVehicleUpdate(vehicle)">
@@ -53,10 +55,24 @@
 
   <div>
     <mat-list matTooltip="Valitse Muokattava ajoneuvo" fxLayout="column" fxLayoutAlign="space-between none">
-      <mat-list-item *ngFor="let vehicle of vehicles" (click)="onVehicleSelect(vehicle)">
+      <h3 matSubheader>Käytössä</h3>
+      <mat-list-item *ngFor="let vehicle of activeVehicles" (click)="onVehicleSelect(vehicle)">
         <p class="pointer">{{vehicle.registration}}_
           {{vehicle.mark}}</p>
       </mat-list-item>
     </mat-list>
   </div>
+
+  <div>
+    <mat-list matTooltip="Valitse Muokattava ajoneuvo" fxLayout="column" fxLayoutAlign="space-between none">
+      <h3 matSubheader>Poistettu</h3>
+      <mat-list-item *ngFor="let vehicle of disableVehicles" (click)="onVehicleSelect(vehicle)">
+        <p class="pointer">{{vehicle.registration}}_
+          {{vehicle.mark}}</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+
+
 </div>

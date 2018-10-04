@@ -14,45 +14,55 @@ import {NotificationSnackbarComponent} from '../notifications/notification-snack
 })
 export class VehiclesComponent implements OnInit {
   vehicle: Vehicle;
-  vehicles: Vehicle[];
+  activeVehicles: Vehicle[];
+  disableVehicles: Vehicle[];
   vehicleId: any;
   editingEnabled: boolean;
+  checked: boolean;
 
   constructor(@Inject(LOCALE_ID) private locale: string, private vehicleService: VehicleService,
               private router: Router, private route: ActivatedRoute,
               private toolbar: ToolbarService, public snackBar: MatSnackBar) {
     this.vehicle = new Vehicle();
-    this.vehicles = [];
+    this.activeVehicles = [];
+    this.disableVehicles = [];
     this.editingEnabled = false;
+    this.checked = true;
   }
 
   ngOnInit() {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Lisää ajoneuvo', []));
-    this.vehicleId = this.route.snapshot.paramMap.get('id');
     this.vehicleService.getVehicles().subscribe(response => {
-      this.vehicles = response;
+      this.activeVehicles = response.filter(i => i.active === true);
+      this.disableVehicles = response.filter(i => i.active === false);
     });
-
-    if (this.vehicleId !== null) {
-      this.editingEnabled = true;
-      this.vehicleService.getVehicleById(this.vehicleId).subscribe(response => {
-        console.log(response);
-        this.vehicle = response;
-      });
-    }
+    this.route.params.subscribe(params => {
+      this.vehicleId = params['id'];
+      console.log(this.vehicleId);
+      if (this.vehicleId !== undefined) {
+          this.editingEnabled = true;
+        this.vehicleService.getVehicleById(+this.vehicleId).subscribe(response => {
+          this.vehicle = response;
+          this.checked = this.vehicle.active;
+        });
+      }
+    });
   }
 
   onVehicleSave(): void {
-    this.vehicleService.createVehicle(this.vehicle).subscribe(response => {});
+    this.vehicleService.createVehicle(this.vehicle).subscribe(response => {
+      this.ngOnInit();
+    });
     this.openSnackBar();
-    this.router.navigate(['/vehicles/']);
   }
 
   OnVehicleUpdate(vehicle): void {
-   this.vehicleService.updateVehicle(vehicle).subscribe(response => {
-     vehicle = response;
-     this.router.navigate(['/vehicles/new']);
-   });
+    this.changed();
+    console.log(this.vehicle);
+    this.vehicleService.updateVehicle(vehicle).subscribe(response => {
+      vehicle = response;
+      this.router.navigate(['/vehicles/new']);
+    });
   }
 
   openSnackBar() {
@@ -64,7 +74,9 @@ export class VehiclesComponent implements OnInit {
 
   onVehicleSelect(vehicle) {
     this.router.navigate(['/vehicles/' + vehicle.id]);
-   // this.ngOnInit();
   }
 
+  changed() {
+    this.vehicle.active = this.checked;
+  }
 }

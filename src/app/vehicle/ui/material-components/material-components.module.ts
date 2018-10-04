@@ -6,7 +6,7 @@ import {
   MatInputModule,
   MatListModule,
   MatNativeDateModule, MatSelectModule,
-  MatSidenavModule, MatSnackBarModule, MatSortModule,
+  MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule,
   MatTableModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -27,7 +27,8 @@ const materialModules = [
   MatTooltipModule,
   MatSelectModule,
   MatDialogModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatSlideToggleModule
 ];
 
 @NgModule({

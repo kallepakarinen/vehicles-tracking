@@ -19,6 +19,7 @@ export class PaysComponent implements OnInit {
   paymentId: any;
   vehicleId: any;
   dialogRef: MatDialogRef<NotificationDialogComponent>;
+  snackBarData: string;
 
   constructor(@Inject(LOCALE_ID) private locale: string,
               private route: ActivatedRoute, private router: Router, private paymentService:
@@ -31,9 +32,10 @@ export class PaysComponent implements OnInit {
     this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Muokkaa maksutapahtuma', []));
     this.paymentId = this.route.snapshot.paramMap.get('id');
     if (this.paymentId !== null) {
-      this.payment = this.paymentService.getPaymentById(+this.paymentId);
+      this.paymentService.getPaymentById(+this.paymentId).subscribe(response => {
+        this.payment = response;
+      });
     }
-    this.vehicleId = this.route.snapshot.paramMap.get('vehicle');
   }
 
   updatePayment(payment): void {
@@ -44,17 +46,28 @@ export class PaysComponent implements OnInit {
     this.dialogRef.componentInstance.data = 'Muokataanko maksutapahtuma?';
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.paymentService.updatePayment(payment);
+        this.paymentService.updatePayment(payment).subscribe(response => {
+          payment = response;
+          this.router.navigate(['/payments', this.payment.vehicleId]);
+        });
+        this.snackBarData = 'Maksu muokattu!';
         this.openSnackBar();
-        this.router.navigate(['/payments', this.payment.vehicleId]);
       }
       this.dialogRef = null;
     });
   }
 
+  onDeletePayment() {
+    this.paymentService.deletePayment(this.payment).subscribe(() => {
+      this.router.navigate(['/payments', this.payment.vehicleId]);
+    });
+    this.snackBarData = 'Maksu Poistettu!';
+    this.openSnackBar();
+  }
+
   openSnackBar() {
     this.snackBar.openFromComponent(NotificationSnackbarComponent, {
-      data: 'Maksun muokkaus onnistui!',
+      data: this.snackBarData,
       duration: 2000,
     });
   }
