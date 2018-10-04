@@ -71,7 +71,7 @@ export class AllPaymentsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Raportti', []));
+ /*   this.toolbar.setToolbarOptions(new ToolbarOptions(true, 'Raportti', []));
     this.vehicles = this.vehicleService.getVehicles();
     this.vehicleCount = _.size(this.vehicles);
     this.totalPayments = this.reportService.getAllPayments();
@@ -152,7 +152,7 @@ export class AllPaymentsComponent implements OnInit {
     this.quartalPaymentsChartData2 = arrays[1];
     this.quartalPaymentsChartData3 = arrays[2];
     this.quartalPaymentsChartData4 = arrays[3];
-    console.log(arrays);
+    console.log(arrays);*/
   }
 
 

@@ -45,13 +45,14 @@ export class PaymentListComponent implements OnInit {
   displayedColumns: string[] = ['day', 'kilometers', 'fuel', 'service', 'parts', 'insurance', 'tax', 'comment'];
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private paymentService: PaymentService, private route: ActivatedRoute, private router: Router, private toolbar: ToolbarService, public snackBar: MatSnackBar, public dialog: MatDialog) {
+  constructor(private paymentService: PaymentService, private route: ActivatedRoute,
+              private router: Router, private toolbar: ToolbarService, public snackBar: MatSnackBar, public dialog: MatDialog) {
     this.payments = [];
     this.dataSource = new MatTableDataSource(this.payments);
     this.dataSource.sort = this.sort;
     this.allPaymentsChartData = [];
     this.payment = new Payment();
-    //this.paymentInput = 0;
+    // this.paymentInput = 0;
   }
 
   ngOnInit() {

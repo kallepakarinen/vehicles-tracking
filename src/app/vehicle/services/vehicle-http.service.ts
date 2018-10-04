@@ -21,7 +21,7 @@ export class VehicleHttpService {
     }));
   }
 
- getById(id): Observable<Vehicle> {
+  getById(id): Observable<Vehicle> {
     return this.httpClient.get(this.url + '/' + id).pipe(map(response => {
       return response as Vehicle;
     }));
@@ -29,6 +29,14 @@ export class VehicleHttpService {
 
   post(vehicle): Observable<Vehicle> {
     return this.httpClient.post(this.url, vehicle).pipe(map(response => {
+      return response as Vehicle;
+    }));
+  }
+
+  put(vehicle): Observable<Vehicle> {
+    console.log(this.url + '/' + vehicle.id);
+    return this.httpClient.put(this.url + '/' + vehicle.id, vehicle).pipe(map(response => {
+      console.log(response);
       return response as Vehicle;
     }));
   }

@@ -12,16 +12,24 @@ export class VehicleService {
   constructor(private vehicleHttpService: VehicleHttpService, private localStorageService: LocalStorageService) {
   }
 
-  getVehicles() {
-    return this.localStorageService.loadVehicles();
+  getVehicles(): Observable<Vehicle[]> {
+    return this.vehicleHttpService.getVehicles();
   }
 
 
-  getVehicleById(vehicleId: number) {
-    return this.localStorageService.getVehicleById(vehicleId);
+  getVehicleById(id): Observable<Vehicle> {
+    return this.vehicleHttpService.getById(id);
   }
 
-  createVehicle(vehicle) {
-    return this.localStorageService.saveVehicle(vehicle);
+
+  createVehicle(vehicle): Observable<Vehicle> {
+    console.log(vehicle);
+    return this.vehicleHttpService.post(vehicle);
+  }
+
+  updateVehicle(vehicle): Observable<Vehicle> {
+    console.log('service');
+    console.log(vehicle);
+    return this.vehicleHttpService.put(vehicle);
   }
 }

@@ -1,53 +1,62 @@
 <div fxLayout="row" fxLayoutAlign="none">
-<div fxLayout="column" fxLayoutAlign="none">
-  <mat-card class="vehicle-card">
-    <mat-form-field>
-      <input matInput [(ngModel)]="vehicle.registration"
-             type="text"
-             required
-             placeholder="Rekisterinumero">
-    </mat-form-field>
+  <div fxLayout="column" fxLayoutAlign="none">
+    <mat-card class="vehicle-card">
+      <mat-form-field>
+        <input matInput [(ngModel)]="vehicle.registration"
+               type="text"
+               required
+               placeholder="Rekisterinumero">
+      </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [(ngModel)]="vehicle.mark"
-             type="text"
-             required
-             placeholder="Merkki">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="vehicle.mark"
+               type="text"
+               required
+               placeholder="Merkki">
+      </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [(ngModel)]="vehicle.acquisitionDay"
-             type="date"
-             required
-             placeholder="Ostopäivä">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="vehicle.acquisitionDay"
+               type="date"
+               required
+               placeholder="Ostopäivä">
+      </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [(ngModel)]="vehicle.prise"
-             type="number"
-             required
-             placeholder="Hinta">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="vehicle.price"
+               type="number"
+               required
+               placeholder="Hinta">
+      </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [(ngModel)]="vehicle.resaleValue"
-             type="number"
-             required
-             placeholder="Jälleenmyyntiarvo">
-    </mat-form-field>
-    <button mat-raised-button color="accent" matTooltip="Tallenna" (click)="onSave()">
-      <mat-icon>save</mat-icon>
-    </button>
-    <button mat-raised-button color="accent" matTooltip="Muokkaa" (click)="onUpdateVehicle()"> Muokkaa</button>
-  </mat-card>
-</div>
+      <mat-form-field>
+        <input matInput [(ngModel)]="vehicle.resaleValue"
+               type="number"
+               required
+               placeholder="Jälleenmyyntiarvo">
+      </mat-form-field>
 
-<div>
-  <mat-list matTooltip="Valitse Muokattava ajoneuvo" fxLayout="column" fxLayoutAlign="space-between none">
-    <mat-list-item *ngFor="let vehicle of vehicles" (click)="onVehicleSelect(vehicle)">
-      <p class="pointer">{{vehicle.registration}}_
-        {{vehicle.mark}}</p>
-    </mat-list-item>
-  </mat-list>
-</div>
+      <button mat-raised-button color="accent" matTooltip="Tallenna" *ngIf="!editingEnabled" (click)="onVehicleSave()">
+        <mat-icon>save</mat-icon>
+      </button>
+
+      <button mat-raised-button color="accent" matTooltip="Poista käytöstä" *ngIf="editingEnabled"
+              (click)="onDeleteVehicle()">
+        <mat-icon>delete</mat-icon>
+      </button>
+
+      <button mat-raised-button color="accent" matTooltip="Muokkaa" *ngIf="editingEnabled" (click)="OnVehicleUpdate(vehicle)">
+        Muokkaa
+      </button>
+    </mat-card>
+  </div>
+
+  <div>
+    <mat-list matTooltip="Valitse Muokattava ajoneuvo" fxLayout="column" fxLayoutAlign="space-between none">
+      <mat-list-item *ngFor="let vehicle of vehicles" (click)="onVehicleSelect(vehicle)">
+        <p class="pointer">{{vehicle.registration}}_
+          {{vehicle.mark}}</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
 </div>
